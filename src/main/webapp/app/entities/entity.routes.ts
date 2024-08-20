@@ -26,6 +26,11 @@ const routes: Routes = [
     data: { pageTitle: 'Autocarejobs' },
     loadChildren: () => import('./autocarejob/autocarejob.routes'),
   },
+  {
+    path: 'vehicletype',
+    data: { pageTitle: 'Vehicletypes' },
+    loadChildren: () => import('./vehicletype/vehicletype.routes'),
+  },
   /* jhipster-needle-add-entity-route - JHipster will add entity modules routes here */
 ];
 
