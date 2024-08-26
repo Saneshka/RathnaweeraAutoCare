@@ -33,13 +33,14 @@
       "Inventorybatches",
       "Vehiclebrandname",
       "Vehiclebrandmodel",
-      "Workshopworklist"
+      "Workshopworklist",
+      "Workshopvehiclework"
     ],
     "feignClient": null,
     "gradleEnterpriseHost": null,
     "jhipsterVersion": "8.4.0",
     "jwtSecretKey": "YjUwYWYwNzkzMTE5YmE3ZWJjYmUxNDMxYzAxZDEzNWNlYTUwMTVkMmRmMDM1MDQyZTRmZWRhNzJiMTQ1YWVlYjMyNDIxZmVhNDM0ZjY4NjU0YjU0MDJhZDk0NmJiNjQ3MmJjMDJmZWU5N2RlYjBkMjhmNDJlOGRhZDRhZjM1MDQ=",
-    "lastLiquibaseTimestamp": 1724411031000,
+    "lastLiquibaseTimestamp": 1724412025000,
     "messageBroker": false,
     "microfrontend": null,
     "microfrontends": [],

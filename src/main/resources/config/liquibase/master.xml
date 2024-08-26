@@ -27,6 +27,7 @@
     <include file="config/liquibase/changelog/20240823100212_added_entity_Vehiclebrandname.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20240823104438_added_entity_Vehiclebrandmodel.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20240823110351_added_entity_Workshopworklist.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20240823112025_added_entity_Workshopvehiclework.xml" relativeToChangelogFile="false"/>
     <!-- jhipster-needle-liquibase-add-changelog - JHipster will add liquibase changelogs here -->
     <!-- jhipster-needle-liquibase-add-constraints-changelog - JHipster will add liquibase constraints changelogs here -->
     <!-- jhipster-needle-liquibase-add-incremental-changelog - JHipster will add incremental liquibase changelogs here -->
