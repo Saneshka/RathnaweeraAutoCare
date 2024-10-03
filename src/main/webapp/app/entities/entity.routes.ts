@@ -141,6 +141,11 @@ const routes: Routes = [
     data: { pageTitle: 'Banks' },
     loadChildren: () => import('./banks/banks.routes'),
   },
+  {
+    path: 'bankbranch',
+    data: { pageTitle: 'Bankbranches' },
+    loadChildren: () => import('./bankbranch/bankbranch.routes'),
+  },
   /* jhipster-needle-add-entity-route - JHipster will add entity modules routes here */
 ];
 
