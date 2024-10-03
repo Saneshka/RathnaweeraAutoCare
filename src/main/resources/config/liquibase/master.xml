@@ -41,6 +41,7 @@
     <include file="config/liquibase/changelog/20241003083148_added_entity_Bankbranch.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20241003085351_added_entity_Accounts.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20241003120039_added_entity_Companybankaccount.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20241003125649_added_entity_Receipt.xml" relativeToChangelogFile="false"/>
     <!-- jhipster-needle-liquibase-add-changelog - JHipster will add liquibase changelogs here -->
     <!-- jhipster-needle-liquibase-add-constraints-changelog - JHipster will add liquibase constraints changelogs here -->
     <!-- jhipster-needle-liquibase-add-incremental-changelog - JHipster will add incremental liquibase changelogs here -->
