@@ -126,6 +126,11 @@ const routes: Routes = [
     data: { pageTitle: 'Salesinvoices' },
     loadChildren: () => import('./salesinvoice/salesinvoice.routes'),
   },
+  {
+    path: 'salesorder',
+    data: { pageTitle: 'Salesorders' },
+    loadChildren: () => import('./salesorder/salesorder.routes'),
+  },
   /* jhipster-needle-add-entity-route - JHipster will add entity modules routes here */
 ];
 
