@@ -37,13 +37,14 @@
       "Workshopvehiclework",
       "Autojobempallocation",
       "Autocarejobcategory",
-      "EmpSectiontbl"
+      "EmpSectiontbl",
+      "EmpJobcommission"
     ],
     "feignClient": null,
     "gradleEnterpriseHost": null,
     "jhipsterVersion": "8.4.0",
     "jwtSecretKey": "YjUwYWYwNzkzMTE5YmE3ZWJjYmUxNDMxYzAxZDEzNWNlYTUwMTVkMmRmMDM1MDQyZTRmZWRhNzJiMTQ1YWVlYjMyNDIxZmVhNDM0ZjY4NjU0YjU0MDJhZDk0NmJiNjQ3MmJjMDJmZWU5N2RlYjBkMjhmNDJlOGRhZDRhZjM1MDQ=",
-    "lastLiquibaseTimestamp": 1727856336000,
+    "lastLiquibaseTimestamp": 1727935820000,
     "messageBroker": false,
     "microfrontend": null,
     "microfrontends": [],

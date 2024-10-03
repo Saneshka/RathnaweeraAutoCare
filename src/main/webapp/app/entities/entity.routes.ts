@@ -106,6 +106,11 @@ const routes: Routes = [
     data: { pageTitle: 'EmpSectiontbls' },
     loadChildren: () => import('./emp-sectiontbl/emp-sectiontbl.routes'),
   },
+  {
+    path: 'emp-jobcommission',
+    data: { pageTitle: 'EmpJobcommissions' },
+    loadChildren: () => import('./emp-jobcommission/emp-jobcommission.routes'),
+  },
   /* jhipster-needle-add-entity-route - JHipster will add entity modules routes here */
 ];
 
