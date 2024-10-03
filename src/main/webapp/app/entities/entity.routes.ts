@@ -111,6 +111,21 @@ const routes: Routes = [
     data: { pageTitle: 'EmpJobcommissions' },
     loadChildren: () => import('./emp-jobcommission/emp-jobcommission.routes'),
   },
+  {
+    path: 'autocarecancelitemopt',
+    data: { pageTitle: 'Autocarecancelitemopts' },
+    loadChildren: () => import('./autocarecancelitemopt/autocarecancelitemopt.routes'),
+  },
+  {
+    path: 'paymentterm',
+    data: { pageTitle: 'Paymentterms' },
+    loadChildren: () => import('./paymentterm/paymentterm.routes'),
+  },
+  {
+    path: 'salesinvoice',
+    data: { pageTitle: 'Salesinvoices' },
+    loadChildren: () => import('./salesinvoice/salesinvoice.routes'),
+  },
   /* jhipster-needle-add-entity-route - JHipster will add entity modules routes here */
 ];
 
