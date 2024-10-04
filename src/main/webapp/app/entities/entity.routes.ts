@@ -181,6 +181,11 @@ const routes: Routes = [
     data: { pageTitle: 'Billingserviceoptionvalues' },
     loadChildren: () => import('./billingserviceoptionvalues/billingserviceoptionvalues.routes'),
   },
+  {
+    path: 'commonserviceoption',
+    data: { pageTitle: 'Commonserviceoptions' },
+    loadChildren: () => import('./commonserviceoption/commonserviceoption.routes'),
+  },
   /* jhipster-needle-add-entity-route - JHipster will add entity modules routes here */
 ];
 
