@@ -171,6 +171,11 @@ const routes: Routes = [
     data: { pageTitle: 'Autojobsinvoices' },
     loadChildren: () => import('./autojobsinvoice/autojobsinvoice.routes'),
   },
+  {
+    path: 'billingserviceoption',
+    data: { pageTitle: 'Billingserviceoptions' },
+    loadChildren: () => import('./billingserviceoption/billingserviceoption.routes'),
+  },
   /* jhipster-needle-add-entity-route - JHipster will add entity modules routes here */
 ];
 
