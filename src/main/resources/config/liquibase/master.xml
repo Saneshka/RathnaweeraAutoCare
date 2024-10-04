@@ -50,6 +50,7 @@
     <include file="config/liquibase/changelog/20241004103156_added_entity_Nextserviceinstructions.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20241004104344_added_entity_Lastserviceinstructions.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20241004105944_added_entity_Autocareservicemillages.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20241004114142_added_entity_Autocarecompany.xml" relativeToChangelogFile="false"/>
     <!-- jhipster-needle-liquibase-add-changelog - JHipster will add liquibase changelogs here -->
     <!-- jhipster-needle-liquibase-add-constraints-changelog - JHipster will add liquibase constraints changelogs here -->
     <!-- jhipster-needle-liquibase-add-incremental-changelog - JHipster will add incremental liquibase changelogs here -->
