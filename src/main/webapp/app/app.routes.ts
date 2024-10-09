@@ -7,6 +7,8 @@ import { errorRoute } from './layouts/error/error.route';
 import HomeComponent from './home/home.component';
 import NavbarComponent from './layouts/navbar/navbar.component';
 import LoginComponent from './login/login.component';
+import SidenavbarComponent from './layouts/sidenavbar/sidenavbar.component';
+// import { SidenavbarComponent } from './layouts/sidenavbar/sidenavbar.component';
 
 const routes: Routes = [
   {
@@ -18,6 +20,11 @@ const routes: Routes = [
     path: '',
     component: NavbarComponent,
     outlet: 'navbar',
+  },
+  {
+    path: '',
+    component: SidenavbarComponent,
+    outlet: 'sidenavbar',
   },
   {
     path: 'admin',
