@@ -23,6 +23,24 @@ import { ICustomer } from 'app/entities/customer/customer.model';
   selector: 'jhi-autocareappointment-update',
   templateUrl: './autocareappointment-update.component.html',
   imports: [SharedModule, FormsModule, ReactiveFormsModule],
+  styles: [
+    `
+      .time-button {
+        padding: 10px;
+        margin: 5px;
+        border: 2px solid transparent;
+        background-color: white;
+        color: black;
+        cursor: pointer;
+      }
+
+      .time-button.selected {
+        background-color: darkgray;
+        border-color: red;
+        color: red;
+      }
+    `,
+  ],
 })
 export class AutocareappointmentUpdateComponent implements OnInit {
   isSaving = false;
@@ -30,6 +48,20 @@ export class AutocareappointmentUpdateComponent implements OnInit {
   autocareappointmenttypes: IAutocareappointmenttype[] = [];
   customervehicles: ICustomervehicle[] = [];
   customerDetails: any | null = null;
+  selectedTime: string | null = null; // Track the selected time
+  selectedHoistId: number | null = null; // Track the selected hoist
+
+  hoists = [
+    { id: 6, name: 'Heavy', times: ['08:00:00 AM', '09:00:00 AM', '11:00:00 AM', '12:30:00 PM', '02:00:00 PM'] },
+    { id: 7, name: 'Heavy', times: ['08:00:00 AM', '09:00:00 AM', '11:00:00 AM', '12:30:00 PM', '02:00:00 PM'] },
+    { id: 8, name: 'Heavy', times: ['08:00:00 AM', '09:00:00 AM', '11:00:00 AM', '12:30:00 PM', '02:00:00 PM'] },
+    { id: 9, name: 'Heavy', times: ['08:00:00 AM', '09:00:00 AM', '11:00:00 AM', '12:30:00 PM', '02:00:00 PM'] },
+    { id: 3, name: 'Light', times: ['08:45:00 AM', '10:15:00 AM', '11:45:00 AM', '01:30:00 PM', '02:45:00 PM'] },
+    { id: 4, name: 'Light', times: ['08:45:00 AM', '10:15:00 AM', '11:45:00 AM', '01:30:00 PM', '02:45:00 PM'] },
+    { id: 5, name: 'Light', times: ['08:45:00 AM', '10:15:00 AM', '11:45:00 AM', '01:30:00 PM', '02:45:00 PM'] },
+    { id: 1, name: 'Double Light', times: ['08:00:00 AM', '09:00:00 AM', '10:00:00 AM', '11:00:00 AM'] },
+    { id: 2, name: 'Double Light', times: ['08:00:00 AM', '09:00:00 AM', '10:00:00 AM', '11:00:00 AM'] },
+  ];
 
   protected autocareappointmentService = inject(AutocareappointmentService);
   protected autocareappointmentFormService = inject(AutocareappointmentFormService);
@@ -50,6 +82,63 @@ export class AutocareappointmentUpdateComponent implements OnInit {
       this.loadDataFromOtherEntities();
       this.loadCustomerDetails();
     });
+  }
+
+  // selectAppointmentTime(time: string, hoistId: number): void {
+  //   const appointmentDate = this.editForm.get(['appointmentdate'])?.value;
+
+  //   if (appointmentDate) {
+  //     const [hours, minutes, seconds] = time.split(':');
+  //     const ampm = time.includes('AM') ? 'AM' : 'PM';
+
+  //     // Convert to 24-hour format if necessary
+  //     let hour = parseInt(hours, 10);
+  //     if (ampm === 'PM' && hour !== 12) {
+  //       hour += 12;
+  //     } else if (ampm === 'AM' && hour === 12) {
+  //       hour = 0;
+  //     }
+
+  //     const appointmentTime = dayjs(appointmentDate)
+  //       .set('hour', hour)
+  //       .set('minute', parseInt(minutes, 10))
+  //       .set('second', parseInt(seconds, 10));
+
+  //     // Patch form with the selected time and hoist ID
+  //     this.editForm.get(['appointmenttime'])?.patchValue(appointmentTime);
+  //     this.editForm.get(['hoistid'])?.patchValue(hoistId);
+  //   }
+  // }
+
+  selectAppointmentTime(time: string, hoistId: number): void {
+    const appointmentDate = this.editForm.get(['appointmentdate'])?.value;
+
+    if (appointmentDate) {
+      // Extract hours, minutes, seconds from the selected time
+      const [hours, minutes, seconds] = time.split(':');
+      const ampm = time.includes('AM') ? 'AM' : 'PM';
+
+      // Convert the time to 24-hour format if necessary
+      let hour = parseInt(hours, 10);
+      if (ampm === 'PM' && hour !== 12) {
+        hour += 12;
+      } else if (ampm === 'AM' && hour === 12) {
+        hour = 0;
+      }
+
+      // Set the appointment time using the date and the selected time
+      const appointmentTime = dayjs(appointmentDate)
+        .set('hour', hour)
+        .set('minute', parseInt(minutes, 10))
+        .set('second', parseInt(seconds, 10));
+
+      // Patch the form fields for appointmenttime and hoistid
+      this.editForm.get(['appointmenttime'])?.patchValue(appointmentTime);
+      this.editForm.get(['hoistid'])?.patchValue(hoistId);
+
+      this.selectedTime = time;
+      this.selectedHoistId = hoistId;
+    }
   }
 
   loadDataFromOtherEntities() {
@@ -100,6 +189,19 @@ export class AutocareappointmentUpdateComponent implements OnInit {
   previousState(): void {
     window.history.back();
   }
+
+  // save(): void {
+  //   this.isSaving = true;
+  //   const autocareappointment = this.autocareappointmentFormService.getAutocareappointment(this.editForm);
+  //   if (autocareappointment.id !== null) {
+  //     autocareappointment.lmd = dayjs();
+  //     this.subscribeToSaveResponse(this.autocareappointmentService.update(autocareappointment));
+  //   } else {
+  //     autocareappointment.addeddate = dayjs();
+  //     autocareappointment.lmd = dayjs();
+  //     this.subscribeToSaveResponse(this.autocareappointmentService.create(autocareappointment));
+  //   }
+  // }
 
   save(): void {
     this.isSaving = true;

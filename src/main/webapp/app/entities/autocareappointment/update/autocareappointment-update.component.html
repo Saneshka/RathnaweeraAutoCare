@@ -82,6 +82,31 @@
           </div>
         </div>
 
+        <div class="schedule-table">
+          <table>
+            <thead>
+              <tr>
+                <th *ngFor="let hoist of hoists">{{ hoist.name }}</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td *ngFor="let hoist of hoists">
+                  <button
+                    type="button"
+                    class="time-button"
+                    [class.selected]="time === selectedTime && hoist.id === selectedHoistId"
+                    *ngFor="let time of hoist.times"
+                    (click)="selectAppointmentTime(time, hoist.id)"
+                  >
+                    {{ time }}
+                  </button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
         <!-- <div class="mb-3">
           <label class="form-label" for="field_addeddate">Addeddate</label>
           <div class="d-flex">
