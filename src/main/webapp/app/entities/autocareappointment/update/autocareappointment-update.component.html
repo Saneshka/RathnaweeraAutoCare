@@ -1,46 +1,88 @@
 <div class="d-flex justify-content-center">
   <div class="col-8">
     <form name="editForm" novalidate (ngSubmit)="save()" [formGroup]="editForm">
-      <h2 id="jhi-autocareappointment-heading" data-cy="AutocareappointmentCreateUpdateHeading">Create or edit a Autocareappointment</h2>
+      <h2 id="jhi-autocareappointment-heading" data-cy="AutocareappointmentCreateUpdateHeading">Add or Edit a Service Appointment</h2>
 
       <div>
         <jhi-alert-error></jhi-alert-error>
 
-        @if (editForm.controls.id.value !== null) {
+        <!-- @if (editForm.controls.id.value !== null) {
           <div class="mb-3">
             <label class="form-label" for="field_id">ID</label>
             <input type="number" class="form-control" name="id" id="field_id" data-cy="id" formControlName="id" [readonly]="true" />
           </div>
-        }
+        } -->
 
-        <div class="mb-3">
-          <label class="form-label" for="field_appointmenttype">Appointmenttype</label>
-          <input
-            type="number"
-            class="form-control"
-            name="appointmenttype"
-            id="field_appointmenttype"
-            data-cy="appointmenttype"
-            formControlName="appointmenttype"
-          />
+        <div class="row">
+          <div class="mb-3 col-4">
+            <label class="form-label" for="field_appointmenttype">Appointment Type</label>
+            <select class="form-control" formControlName="appointmenttype">
+              <option *ngFor="let item of autocareappointmenttypes" [value]="item.id">
+                {{ item.typename }}
+              </option>
+            </select>
+          </div>
+
+          <div class="mb-3 col-4">
+            <label class="form-label" for="field_appointmentdate">Appointmentdate</label>
+            <div class="d-flex">
+              <input
+                id="field_appointmentdate"
+                data-cy="appointmentdate"
+                type="datetime-local"
+                class="form-control"
+                name="appointmentdate"
+                formControlName="appointmentdate"
+                placeholder="YYYY-MM-DD HH:mm"
+              />
+            </div>
+          </div>
         </div>
 
-        <div class="mb-3">
-          <label class="form-label" for="field_appointmentdate">Appointmentdate</label>
-          <div class="d-flex">
+        <div class="row">
+          <div class="mb-3 col-4">
+            <label class="form-label" for="field_vehiclenumber">Vehiclenumber</label>
             <input
-              id="field_appointmentdate"
-              data-cy="appointmentdate"
-              type="datetime-local"
+              list="vehiclenumber"
+              type="text"
               class="form-control"
-              name="appointmentdate"
-              formControlName="appointmentdate"
-              placeholder="YYYY-MM-DD HH:mm"
+              name="vehiclenumber"
+              id="field_vehiclenumber"
+              data-cy="vehiclenumber"
+              formControlName="vehiclenumber"
+              autocomplete="off"
+            />
+            <datalist id="vehiclenumber">
+              <option *ngFor="let item of customervehicles" [value]="item.vehiclenumber">
+                {{ item.milage }}KM - {{ item.nextmilage }}KM
+              </option>
+            </datalist>
+          </div>
+          <div class="mb-3 col-4">
+            <label class="form-label" for="field_customername">Customername</label>
+            <input
+              type="text"
+              class="form-control"
+              name="customername"
+              id="field_customername"
+              data-cy="customername"
+              formControlName="customername"
+            />
+          </div>
+          <div class="mb-3 col-4">
+            <label class="form-label" for="field_contactnumber">Contactnumber</label>
+            <input
+              type="text"
+              class="form-control"
+              name="contactnumber"
+              id="field_contactnumber"
+              data-cy="contactnumber"
+              formControlName="contactnumber"
             />
           </div>
         </div>
 
-        <div class="mb-3">
+        <!-- <div class="mb-3">
           <label class="form-label" for="field_addeddate">Addeddate</label>
           <div class="d-flex">
             <input
@@ -53,7 +95,7 @@
               placeholder="YYYY-MM-DD HH:mm"
             />
           </div>
-        </div>
+        </div> -->
 
         <div class="mb-3">
           <label class="form-label" for="field_conformdate">Conformdate</label>
@@ -79,18 +121,6 @@
             id="field_appointmentnumber"
             data-cy="appointmentnumber"
             formControlName="appointmentnumber"
-          />
-        </div>
-
-        <div class="mb-3">
-          <label class="form-label" for="field_vehiclenumber">Vehiclenumber</label>
-          <input
-            type="text"
-            class="form-control"
-            name="vehiclenumber"
-            id="field_vehiclenumber"
-            data-cy="vehiclenumber"
-            formControlName="vehiclenumber"
           />
         </div>
 
@@ -162,30 +192,6 @@
             id="field_customerid"
             data-cy="customerid"
             formControlName="customerid"
-          />
-        </div>
-
-        <div class="mb-3">
-          <label class="form-label" for="field_contactnumber">Contactnumber</label>
-          <input
-            type="text"
-            class="form-control"
-            name="contactnumber"
-            id="field_contactnumber"
-            data-cy="contactnumber"
-            formControlName="contactnumber"
-          />
-        </div>
-
-        <div class="mb-3">
-          <label class="form-label" for="field_customername">Customername</label>
-          <input
-            type="text"
-            class="form-control"
-            name="customername"
-            id="field_customername"
-            data-cy="customername"
-            formControlName="customername"
           />
         </div>
 
