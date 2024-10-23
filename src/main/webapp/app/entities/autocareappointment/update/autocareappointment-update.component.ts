@@ -1,4 +1,4 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, inject, OnInit, ViewEncapsulation } from '@angular/core';
 import { HttpResponse } from '@angular/common/http';
 import { ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs';
@@ -17,27 +17,68 @@ import { ICustomervehicle } from 'app/entities/customervehicle/customervehicle.m
 import { CustomervehicleService } from 'app/entities/customervehicle/service/customervehicle.service';
 import { CustomerService } from 'app/entities/customer/service/customer.service';
 import { ICustomer } from 'app/entities/customer/customer.model';
+import { AutocarehoistService } from 'app/entities/autocarehoist/service/autocarehoist.service';
 
 @Component({
   standalone: true,
   selector: 'jhi-autocareappointment-update',
   templateUrl: './autocareappointment-update.component.html',
+  encapsulation: ViewEncapsulation.None,
   imports: [SharedModule, FormsModule, ReactiveFormsModule],
   styles: [
     `
-      .time-button {
+      // .time-button {
+      //   padding: 10px;
+      //   margin: 5px;
+      //   border: 2px solid transparent;
+      //   background-color: white;
+      //   color: black;
+      //   cursor: pointer;
+      // }
+
+      // .time-button.selected {
+      //   background-color: darkgray;
+      //   border-color: red;
+      //   color: red;
+      // }
+
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        text-align: center;
+      }
+
+      th,
+      td {
         padding: 10px;
+        border: 1px solid #ccc;
+      }
+
+      th {
+        background-color: #6fb1ff;
+        color: white;
+        font-weight: bold;
+      }
+
+      .time-button {
+        display: block;
         margin: 5px;
-        border: 2px solid transparent;
-        background-color: white;
-        color: black;
+        width: 100%;
+        padding: 10px;
+        background-color: #f0f0f0;
+        border: 1px solid #ccc;
         cursor: pointer;
       }
 
       .time-button.selected {
-        background-color: darkgray;
-        border-color: red;
-        color: red;
+        background-color: #333; /* Darker background */
+        border: 2px solid red; /* Red border */
+        color: white;
+      }
+
+      .time-button:hover {
+        background-color: #0056b3;
+        color: white;
       }
     `,
   ],
@@ -48,20 +89,10 @@ export class AutocareappointmentUpdateComponent implements OnInit {
   autocareappointmenttypes: IAutocareappointmenttype[] = [];
   customervehicles: ICustomervehicle[] = [];
   customerDetails: any | null = null;
-  selectedTime: string | null = null; // Track the selected time
-  selectedHoistId: number | null = null; // Track the selected hoist
+  selectedTime: string | null = null;
+  selectedHoist: number | null = null;
 
-  hoists = [
-    { id: 6, name: 'Heavy', times: ['08:00:00 AM', '09:00:00 AM', '11:00:00 AM', '12:30:00 PM', '02:00:00 PM'] },
-    { id: 7, name: 'Heavy', times: ['08:00:00 AM', '09:00:00 AM', '11:00:00 AM', '12:30:00 PM', '02:00:00 PM'] },
-    { id: 8, name: 'Heavy', times: ['08:00:00 AM', '09:00:00 AM', '11:00:00 AM', '12:30:00 PM', '02:00:00 PM'] },
-    { id: 9, name: 'Heavy', times: ['08:00:00 AM', '09:00:00 AM', '11:00:00 AM', '12:30:00 PM', '02:00:00 PM'] },
-    { id: 3, name: 'Light', times: ['08:45:00 AM', '10:15:00 AM', '11:45:00 AM', '01:30:00 PM', '02:45:00 PM'] },
-    { id: 4, name: 'Light', times: ['08:45:00 AM', '10:15:00 AM', '11:45:00 AM', '01:30:00 PM', '02:45:00 PM'] },
-    { id: 5, name: 'Light', times: ['08:45:00 AM', '10:15:00 AM', '11:45:00 AM', '01:30:00 PM', '02:45:00 PM'] },
-    { id: 1, name: 'Double Light', times: ['08:00:00 AM', '09:00:00 AM', '10:00:00 AM', '11:00:00 AM'] },
-    { id: 2, name: 'Double Light', times: ['08:00:00 AM', '09:00:00 AM', '10:00:00 AM', '11:00:00 AM'] },
-  ];
+  hoists: { id: number; name: string; times: string[] }[] = [];
 
   protected autocareappointmentService = inject(AutocareappointmentService);
   protected autocareappointmentFormService = inject(AutocareappointmentFormService);
@@ -69,6 +100,7 @@ export class AutocareappointmentUpdateComponent implements OnInit {
   protected autocareappointmenttypeService = inject(AutocareappointmenttypeService);
   protected customervehicleService = inject(CustomervehicleService);
   protected customerService = inject(CustomerService);
+  protected autocarehoistService = inject(AutocarehoistService);
 
   // eslint-disable-next-line @typescript-eslint/member-ordering
   editForm: AutocareappointmentFormGroup = this.autocareappointmentFormService.createAutocareappointmentFormGroup();
@@ -81,64 +113,31 @@ export class AutocareappointmentUpdateComponent implements OnInit {
       }
       this.loadDataFromOtherEntities();
       this.loadCustomerDetails();
+      this.loadHoists();
     });
   }
 
-  // selectAppointmentTime(time: string, hoistId: number): void {
-  //   const appointmentDate = this.editForm.get(['appointmentdate'])?.value;
+  onTimeClick(hoistId: number, time: string): void {
+    this.selectedTime = time;
+    this.selectedHoist = hoistId;
 
-  //   if (appointmentDate) {
-  //     const [hours, minutes, seconds] = time.split(':');
-  //     const ampm = time.includes('AM') ? 'AM' : 'PM';
+    console.log('Selected hoist ID:', this.selectedHoist);
+    console.log('Selected time:', this.selectedTime);
+    // Update the hoist ID in the form
+    this.editForm.get('hoistid')?.patchValue(hoistId);
 
-  //     // Convert to 24-hour format if necessary
-  //     let hour = parseInt(hours, 10);
-  //     if (ampm === 'PM' && hour !== 12) {
-  //       hour += 12;
-  //     } else if (ampm === 'AM' && hour === 12) {
-  //       hour = 0;
-  //     }
+    // Get the current appointment date or default to today's date
+    const appointmentDate = this.editForm.get('appointmentdate')?.value || dayjs();
 
-  //     const appointmentTime = dayjs(appointmentDate)
-  //       .set('hour', hour)
-  //       .set('minute', parseInt(minutes, 10))
-  //       .set('second', parseInt(seconds, 10));
+    // Combine the appointment date with the selected time
+    const [hour, minute] = time.split(':');
+    const fullDateTime = dayjs(appointmentDate).set('hour', parseInt(hour, 10)).set('minute', parseInt(minute, 10));
 
-  //     // Patch form with the selected time and hoist ID
-  //     this.editForm.get(['appointmenttime'])?.patchValue(appointmentTime);
-  //     this.editForm.get(['hoistid'])?.patchValue(hoistId);
-  //   }
-  // }
+    // Format the date and time as a local string (without converting to UTC)
+    const formattedDateTime = fullDateTime.format('YYYY-MM-DDTHH:mm:ss');
 
-  selectAppointmentTime(time: string, hoistId: number): void {
-    const appointmentDate = this.editForm.get(['appointmentdate'])?.value;
-
-    if (appointmentDate) {
-      // Extract hours, minutes, seconds from the selected time
-      const [hours, minutes, seconds] = time.split(':');
-      const ampm = time.includes('AM') ? 'AM' : 'PM';
-
-      // Convert the time to 24-hour format if necessary
-      let hour = parseInt(hours, 10);
-      if (ampm === 'PM' && hour !== 12) {
-        hour += 12;
-      } else if (ampm === 'AM' && hour === 12) {
-        hour = 0;
-      }
-
-      // Set the appointment time using the date and the selected time
-      const appointmentTime = dayjs(appointmentDate)
-        .set('hour', hour)
-        .set('minute', parseInt(minutes, 10))
-        .set('second', parseInt(seconds, 10));
-
-      // Patch the form fields for appointmenttime and hoistid
-      this.editForm.get(['appointmenttime'])?.patchValue(appointmentTime);
-      this.editForm.get(['hoistid'])?.patchValue(hoistId);
-
-      this.selectedTime = time;
-      this.selectedHoistId = hoistId;
-    }
+    // Update the appointment time in the form with the formatted local time
+    this.editForm.get('appointmenttime')?.patchValue(formattedDateTime);
   }
 
   loadDataFromOtherEntities() {
@@ -154,14 +153,6 @@ export class AutocareappointmentUpdateComponent implements OnInit {
       });
     }
   }
-
-  // loadCustomerDetails(id: any) {
-  //   this.customerDetails = this.customerService.find(id);
-  //   console.log(this.customerDetails)
-  //   // if (this.customerDetails) {
-  //   //   this.editForm.get(['customername'])?.patchValue(this.customerDetails.n)
-  //   // }
-  // }
 
   loadCustomerDetails() {
     this.editForm.get(['vehiclenumber'])?.valueChanges.subscribe(vehicleNumber => {
@@ -184,6 +175,68 @@ export class AutocareappointmentUpdateComponent implements OnInit {
         this.editForm.get(['contactnumber'])?.patchValue(null);
       }
     });
+  }
+
+  loadHoists(): void {
+    this.autocarehoistService.query().subscribe(response => {
+      const hoistData = response.body || [];
+
+      // Map the fetched hoist data to the structure required
+      this.hoists = hoistData.map(hoist => {
+        const hoistType = this.getHoistType(hoist.id); // You might determine type based on the hoist ID or other fields
+        const times = this.generateTimeSlots(hoistType);
+
+        return {
+          id: hoist.id,
+          name: hoistType,
+          times: times,
+        };
+      });
+    });
+  }
+
+  getHoistType(hoistId: number): string {
+    // Determine hoist type based on hoistId or other criteria
+    // Example logic: you can adjust this as per your data source
+    if ([1, 2].includes(hoistId)) {
+      return 'Double Light';
+    } else if ([3, 4, 5].includes(hoistId)) {
+      return 'Light';
+    } else {
+      return 'Heavy';
+    }
+  }
+
+  generateTimeSlots(hoistType: string): string[] {
+    let timeSlots: string[] = [];
+    let startTime = dayjs('2024-01-01T08:00:00'); // Start from 08:00 AM
+    let endTime;
+
+    if (hoistType === 'Heavy') {
+      // Heavy hoists (Gap of 1 hour and 30 minutes, end at 02:30 PM)
+      endTime = dayjs('2024-01-01T14:30:00');
+      while (startTime.isBefore(endTime)) {
+        timeSlots.push(startTime.format('hh:mm A'));
+        startTime = startTime.add(1, 'hour').add(30, 'minutes');
+      }
+    } else if (hoistType === 'Light') {
+      // Light hoists (Gap of 45 minutes, end at 05:00 PM)
+      endTime = dayjs('2024-01-01T17:00:00');
+      while (startTime.isBefore(endTime)) {
+        timeSlots.push(startTime.format('hh:mm A'));
+        startTime = startTime.add(45, 'minutes');
+      }
+    } else if (hoistType === 'Double Light') {
+      // Double Light hoists (Gap of 45 minutes, but double the slots)
+      endTime = dayjs('2024-01-01T17:00:00');
+      while (startTime.isBefore(endTime)) {
+        const slot = startTime.format('hh:mm A');
+        timeSlots.push(slot, slot); // Push twice for double capacity
+        startTime = startTime.add(45, 'minutes');
+      }
+    }
+
+    return timeSlots;
   }
 
   previousState(): void {

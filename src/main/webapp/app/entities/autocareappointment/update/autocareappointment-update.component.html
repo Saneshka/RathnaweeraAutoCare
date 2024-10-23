@@ -82,28 +82,43 @@
           </div>
         </div>
 
-        <div class="schedule-table">
+        <!-- <div class="table-responsive table-entities" id="entities" style="max-height: 339px; overflow-y: auto">
           <table>
-            <thead>
+            <div *ngFor="let hoist of hoists" class="hoist-section">
               <tr>
-                <th *ngFor="let hoist of hoists">{{ hoist.name }} <br />{{ hoist.id }}</th>
+                <th style="width: 15%">{{ hoist.name }} (Hoist {{ hoist.id }})</th>
+                <td class="time-buttons" style="justify-items: start">
+                  <button style="width: 80px" type="button" *ngFor="let time of hoist.times" (click)="onTimeClick(hoist.id, time)">
+                    {{ time }}
+                  </button>
+                </td>
               </tr>
-            </thead>
-            <tbody>
+            </div>
+          </table>
+        </div> -->
+
+        <div class="table-responsive table-entities" id="entities" style="max-height: 339px; overflow-y: auto">
+          <table>
+            <div *ngFor="let hoist of hoists" class="hoist-section">
               <tr>
-                <td *ngFor="let hoist of hoists">
+                <th style="width: 15%">{{ hoist.name }} (Hoist {{ hoist.id }})</th>
+                <td class="time-buttons" style="justify-items: start">
                   <button
+                    style="width: 80px"
                     type="button"
-                    class="time-button"
-                    [class.selected]="time === selectedTime && hoist.id === selectedHoistId"
                     *ngFor="let time of hoist.times"
-                    (click)="selectAppointmentTime(time, hoist.id)"
+                    [ngStyle]="{
+                      'background-color': selectedTime === time && selectedHoist === hoist.id ? '#333' : '#f0f0f0',
+                      border: selectedTime === time && selectedHoist === hoist.id ? '2px solid red' : '1px solid #ccc',
+                      color: selectedTime === time && selectedHoist === hoist.id ? 'white' : 'black'
+                    }"
+                    (click)="onTimeClick(hoist.id, time)"
                   >
                     {{ time }}
                   </button>
                 </td>
               </tr>
-            </tbody>
+            </div>
           </table>
         </div>
 
@@ -122,7 +137,7 @@
           </div>
         </div> -->
 
-        <div class="mb-3">
+        <!-- <div class="mb-3">
           <label class="form-label" for="field_conformdate">Conformdate</label>
           <div class="d-flex">
             <input
@@ -135,7 +150,7 @@
               placeholder="YYYY-MM-DD HH:mm"
             />
           </div>
-        </div>
+        </div> -->
 
         <div class="mb-3">
           <label class="form-label" for="field_appointmentnumber">Appointmentnumber</label>
@@ -149,7 +164,7 @@
           />
         </div>
 
-        <div class="mb-3">
+        <!-- <div class="mb-3">
           <label class="form-label" for="field_appointmenttime">Appointmenttime</label>
           <div class="d-flex">
             <input
@@ -162,9 +177,9 @@
               placeholder="YYYY-MM-DD HH:mm"
             />
           </div>
-        </div>
+        </div> -->
 
-        <div class="mb-3">
+        <!-- <div class="mb-3">
           <label class="form-label" for="field_isconformed">Isconformed</label>
           <input
             type="checkbox"
@@ -174,9 +189,9 @@
             data-cy="isconformed"
             formControlName="isconformed"
           />
-        </div>
+        </div> -->
 
-        <div class="mb-3">
+        <!-- <div class="mb-3">
           <label class="form-label" for="field_conformedby">Conformedby</label>
           <input
             type="number"
@@ -186,9 +201,9 @@
             data-cy="conformedby"
             formControlName="conformedby"
           />
-        </div>
+        </div> -->
 
-        <div class="mb-3">
+        <!-- <div class="mb-3">
           <label class="form-label" for="field_lmd">Lmd</label>
           <div class="d-flex">
             <input
@@ -201,14 +216,14 @@
               placeholder="YYYY-MM-DD HH:mm"
             />
           </div>
-        </div>
+        </div> -->
 
-        <div class="mb-3">
+        <!-- <div class="mb-3">
           <label class="form-label" for="field_lmu">Lmu</label>
           <input type="number" class="form-control" name="lmu" id="field_lmu" data-cy="lmu" formControlName="lmu" />
-        </div>
+        </div> -->
 
-        <div class="mb-3">
+        <!-- <div class="mb-3">
           <label class="form-label" for="field_customerid">Customerid</label>
           <input
             type="number"
@@ -218,29 +233,29 @@
             data-cy="customerid"
             formControlName="customerid"
           />
-        </div>
+        </div> -->
 
-        <div class="mb-3">
+        <!-- <div class="mb-3">
           <label class="form-label" for="field_issued">Issued</label>
           <input type="checkbox" class="form-check" name="issued" id="field_issued" data-cy="issued" formControlName="issued" />
-        </div>
+        </div> -->
 
-        <div class="mb-3">
+        <!-- <div class="mb-3">
           <label class="form-label" for="field_hoistid">Hoistid</label>
           <input type="number" class="form-control" name="hoistid" id="field_hoistid" data-cy="hoistid" formControlName="hoistid" />
-        </div>
+        </div> -->
 
-        <div class="mb-3">
+        <!-- <div class="mb-3">
           <label class="form-label" for="field_isarrived">Isarrived</label>
           <input type="checkbox" class="form-check" name="isarrived" id="field_isarrived" data-cy="isarrived" formControlName="isarrived" />
-        </div>
+        </div> -->
 
-        <div class="mb-3">
+        <!-- <div class="mb-3">
           <label class="form-label" for="field_iscancel">Iscancel</label>
           <input type="checkbox" class="form-check" name="iscancel" id="field_iscancel" data-cy="iscancel" formControlName="iscancel" />
-        </div>
+        </div> -->
 
-        <div class="mb-3">
+        <!-- <div class="mb-3">
           <label class="form-label" for="field_isnoanswer">Isnoanswer</label>
           <input
             type="checkbox"
@@ -250,9 +265,9 @@
             data-cy="isnoanswer"
             formControlName="isnoanswer"
           />
-        </div>
+        </div> -->
 
-        <div class="mb-3">
+        <!-- <div class="mb-3">
           <label class="form-label" for="field_missedappointmentcall">Missedappointmentcall</label>
           <input
             type="text"
@@ -262,9 +277,9 @@
             data-cy="missedappointmentcall"
             formControlName="missedappointmentcall"
           />
-        </div>
+        </div> -->
 
-        <div class="mb-3">
+        <!-- <div class="mb-3">
           <label class="form-label" for="field_customermobileid">Customermobileid</label>
           <input
             type="number"
@@ -274,9 +289,9 @@
             data-cy="customermobileid"
             formControlName="customermobileid"
           />
-        </div>
+        </div> -->
 
-        <div class="mb-3">
+        <!-- <div class="mb-3">
           <label class="form-label" for="field_customermobilevehicleid">Customermobilevehicleid</label>
           <input
             type="number"
@@ -286,14 +301,14 @@
             data-cy="customermobilevehicleid"
             formControlName="customermobilevehicleid"
           />
-        </div>
+        </div> -->
 
-        <div class="mb-3">
+        <!-- <div class="mb-3">
           <label class="form-label" for="field_vehicleid">Vehicleid</label>
           <input type="number" class="form-control" name="vehicleid" id="field_vehicleid" data-cy="vehicleid" formControlName="vehicleid" />
-        </div>
+        </div> -->
 
-        <div class="mb-3">
+        <!-- <div class="mb-3">
           <label class="form-label" for="field_ismobileappointment">Ismobileappointment</label>
           <input
             type="checkbox"
@@ -303,9 +318,9 @@
             data-cy="ismobileappointment"
             formControlName="ismobileappointment"
           />
-        </div>
+        </div> -->
 
-        <div class="mb-3">
+        <!-- <div class="mb-3">
           <label class="form-label" for="field_advancepayment">Advancepayment</label>
           <input
             type="number"
@@ -315,12 +330,12 @@
             data-cy="advancepayment"
             formControlName="advancepayment"
           />
-        </div>
+        </div> -->
 
-        <div class="mb-3">
+        <!-- <div class="mb-3">
           <label class="form-label" for="field_jobid">Jobid</label>
           <input type="number" class="form-control" name="jobid" id="field_jobid" data-cy="jobid" formControlName="jobid" />
-        </div>
+        </div> -->
       </div>
 
       <div>
