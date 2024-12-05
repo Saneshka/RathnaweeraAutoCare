@@ -24,23 +24,23 @@
           </div>
 
           <div class="mb-3 col-4">
-            <label class="form-label" for="field_appointmentdate">Appointmentdate</label>
+            <label class="form-label" for="field_appointmentdate">Appointment Date</label>
             <div class="d-flex">
               <input
                 id="field_appointmentdate"
                 data-cy="appointmentdate"
-                type="datetime-local"
+                type="date"
                 class="form-control"
                 name="appointmentdate"
                 formControlName="appointmentdate"
-                placeholder="YYYY-MM-DD HH:mm"
+                placeholder="YYYY-MM-DD"
               />
             </div>
           </div>
         </div>
 
         <div class="row">
-          <div class="mb-3 col-4">
+          <!-- <div class="mb-3 col-4">
             <label class="form-label" for="field_vehiclenumber">Vehiclenumber</label>
             <input
               list="vehiclenumber"
@@ -57,7 +57,28 @@
                 {{ item.milage }}KM - {{ item.nextmilage }}KM
               </option>
             </datalist>
+          </div> -->
+
+          <div class="mb-3 col-4">
+            <label class="form-label" for="field_vehiclenumber">Vehiclenumber</label>
+            <input
+              type="text"
+              class="form-control"
+              name="vehiclenumber"
+              id="field_vehiclenumber"
+              data-cy="vehiclenumber"
+              formControlName="vehiclenumber"
+              autocomplete="off"
+              (input)="onVehicleSearch($event)"
+            />
+
+            <datalist id="vehiclenumber">
+              <option *ngFor="let item of filteredVehicles" [value]="item.vehiclenumber">
+                {{ item.milage }}KM - {{ item.nextmilage }}KM
+              </option>
+            </datalist>
           </div>
+
           <div class="mb-3 col-4">
             <label class="form-label" for="field_customername">Customername</label>
             <input
@@ -81,6 +102,138 @@
             />
           </div>
         </div>
+        <div>
+          <!-- <table>
+            <div *ngFor="let hoistType of hoistTypeData">
+              <tr>
+                <th style="width: 100px">{{ hoistType.hoisttype }}</th>
+                <div *ngFor="let hoist of hoistData">
+                  <ng-container *ngIf="hoist.hoisttypeid === hoistType.id">
+                    <td>Hoist {{ hoist.id }}</td>
+                    <td>
+                      <div *ngFor="let timetable of timetableData" style="flex-direction: row">
+                        <button style="width: 100px">
+                          {{ timetable.hoisttime | date: 'hh:mm a' : '+0000' }}
+                        </button>
+                      </div>
+                    </td>
+                  </ng-container>
+                </div>
+              </tr>
+            </div>
+          </table> -->
+
+          <!-- 
+          <div class="accordion" id="accordionExample">
+            <div *ngFor="let hoistType of hoistTypeData; let i = index" class="accordion-item">
+              <h2 class="accordion-header" [id]="'heading' + i">
+                <button
+                  class="accordion-button"
+                  type="button"
+                  data-bs-toggle="collapse"
+                  [attr.data-bs-target]="'#collapse' + i"
+                  [attr.aria-expanded]="i === 0 ? 'true' : 'false'"
+                  [attr.aria-controls]="'collapse' + i"
+                >
+                  {{ hoistType.hoisttype }}
+                </button>
+              </h2>
+              <div
+                [id]="'collapse' + i"
+                class="accordion-collapse collapse"
+                [class.show]="i === 0"
+                [attr.aria-labelledby]="'heading' + i"
+                data-bs-parent="#accordionExample"
+              >
+                <div class="accordion-body">
+                  <div *ngFor="let hoist of hoistData" class="mb-3">
+                    <ng-container *ngIf="hoist.hoisttypeid === hoistType.id">
+                      <p>Hoist {{ hoist.id }}</p>
+                      <div style="display: flex; flex-wrap: wrap; gap: 8px">
+                        <ng-container *ngFor="let timetable of timetableData">
+                          <ng-container *ngIf="timetable.hoistid === hoist.id">
+                            <button style="width: 100px">
+                              {{ timetable.hoisttime | date: 'hh:mm a' : '+0000' }}
+                            </button>
+                          </ng-container>
+                        </ng-container>
+                      </div>
+                    </ng-container>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div> -->
+
+          <div class="accordion" id="accordionExample">
+            <div *ngFor="let hoistType of hoistTypeData; let i = index" class="accordion-item">
+              <h2 class="accordion-header" [id]="'heading' + i">
+                <button
+                  class="accordion-button"
+                  type="button"
+                  data-bs-toggle="collapse"
+                  [attr.data-bs-target]="'#collapse' + i"
+                  [attr.aria-expanded]="i === 0 ? 'true' : 'false'"
+                  [attr.aria-controls]="'collapse' + i"
+                >
+                  {{ hoistType.hoisttype }}
+                </button>
+              </h2>
+              <div
+                [id]="'collapse' + i"
+                class="accordion-collapse collapse"
+                [class.show]="i === 0"
+                [attr.aria-labelledby]="'heading' + i"
+                data-bs-parent="#accordionExample"
+              >
+                <div class="accordion-body">
+                  <div *ngFor="let hoist of hoistData" class="mb-3">
+                    <ng-container *ngIf="hoist.hoisttypeid === hoistType.id">
+                      <p>Hoist {{ hoist.id }}</p>
+
+                      <!-- Nested accordion for time slots -->
+                      <div class="accordion" [id]="'hoistAccordion' + hoist.id">
+                        <div class="accordion-item">
+                          <h2 class="accordion-header" [id]="'headingHoist' + hoist.id">
+                            <button
+                              class="accordion-button collapsed"
+                              type="button"
+                              data-bs-toggle="collapse"
+                              [attr.data-bs-target]="'#collapseHoist' + hoist.id"
+                              [attr.aria-expanded]="false"
+                              [attr.aria-controls]="'collapseHoist' + hoist.id"
+                            >
+                              Show Timeslots
+                            </button>
+                          </h2>
+                          <div
+                            [id]="'collapseHoist' + hoist.id"
+                            class="accordion-collapse collapse"
+                            [attr.aria-labelledby]="'headingHoist' + hoist.id"
+                            [attr.data-bs-parent]="'#hoistAccordion' + hoist.id"
+                          >
+                            <div class="accordion-body">
+                              <div style="display: flex; flex-wrap: wrap; gap: 8px">
+                                <ng-container *ngFor="let timetable of timetableData">
+                                  <ng-container *ngIf="timetable.hoisttypename === hoistType.hoisttype">
+                                    <button type="button" style="width: 100px" (click)="selectTime(timetable)" class="btn btn-primary">
+                                      {{ timetable.hoisttime | date: 'hh:mm a' : '+0000' }}
+                                      <!-- {{ timetable.hoisttime }} -->
+                                    </button>
+                                  </ng-container>
+                                </ng-container>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </ng-container>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
 
         <!-- <div class="table-responsive table-entities" id="entities" style="max-height: 339px; overflow-y: auto">
           <table>
@@ -97,7 +250,7 @@
           </table>
         </div> -->
 
-        <div class="table-responsive table-entities" id="entities" style="max-height: 339px; overflow-y: auto">
+        <!-- <div class="table-responsive table-entities" id="entities" style="max-height: 339px; overflow-y: auto">
           <table>
             <div *ngFor="let hoist of hoists" class="hoist-section">
               <tr>
@@ -120,9 +273,9 @@
               </tr>
             </div>
           </table>
-        </div>
+        </div> -->
 
-        <!-- <div class="mb-3">
+        <div class="mb-3">
           <label class="form-label" for="field_addeddate">Addeddate</label>
           <div class="d-flex">
             <input
@@ -135,9 +288,9 @@
               placeholder="YYYY-MM-DD HH:mm"
             />
           </div>
-        </div> -->
+        </div>
 
-        <!-- <div class="mb-3">
+        <div class="mb-3">
           <label class="form-label" for="field_conformdate">Conformdate</label>
           <div class="d-flex">
             <input
@@ -150,7 +303,7 @@
               placeholder="YYYY-MM-DD HH:mm"
             />
           </div>
-        </div> -->
+        </div>
 
         <div class="mb-3">
           <label class="form-label" for="field_appointmentnumber">Appointmentnumber</label>
@@ -164,7 +317,7 @@
           />
         </div>
 
-        <!-- <div class="mb-3">
+        <div class="mb-3">
           <label class="form-label" for="field_appointmenttime">Appointmenttime</label>
           <div class="d-flex">
             <input
@@ -177,9 +330,9 @@
               placeholder="YYYY-MM-DD HH:mm"
             />
           </div>
-        </div> -->
+        </div>
 
-        <!-- <div class="mb-3">
+        <div class="mb-3">
           <label class="form-label" for="field_isconformed">Isconformed</label>
           <input
             type="checkbox"
@@ -189,9 +342,9 @@
             data-cy="isconformed"
             formControlName="isconformed"
           />
-        </div> -->
+        </div>
 
-        <!-- <div class="mb-3">
+        <div class="mb-3">
           <label class="form-label" for="field_conformedby">Conformedby</label>
           <input
             type="number"
@@ -201,9 +354,9 @@
             data-cy="conformedby"
             formControlName="conformedby"
           />
-        </div> -->
+        </div>
 
-        <!-- <div class="mb-3">
+        <div class="mb-3">
           <label class="form-label" for="field_lmd">Lmd</label>
           <div class="d-flex">
             <input
@@ -216,14 +369,14 @@
               placeholder="YYYY-MM-DD HH:mm"
             />
           </div>
-        </div> -->
+        </div>
 
-        <!-- <div class="mb-3">
+        <div class="mb-3">
           <label class="form-label" for="field_lmu">Lmu</label>
           <input type="number" class="form-control" name="lmu" id="field_lmu" data-cy="lmu" formControlName="lmu" />
-        </div> -->
+        </div>
 
-        <!-- <div class="mb-3">
+        <div class="mb-3">
           <label class="form-label" for="field_customerid">Customerid</label>
           <input
             type="number"
@@ -233,29 +386,29 @@
             data-cy="customerid"
             formControlName="customerid"
           />
-        </div> -->
+        </div>
 
-        <!-- <div class="mb-3">
+        <div class="mb-3">
           <label class="form-label" for="field_issued">Issued</label>
           <input type="checkbox" class="form-check" name="issued" id="field_issued" data-cy="issued" formControlName="issued" />
-        </div> -->
+        </div>
 
-        <!-- <div class="mb-3">
+        <div class="mb-3">
           <label class="form-label" for="field_hoistid">Hoistid</label>
           <input type="number" class="form-control" name="hoistid" id="field_hoistid" data-cy="hoistid" formControlName="hoistid" />
-        </div> -->
+        </div>
 
-        <!-- <div class="mb-3">
+        <div class="mb-3">
           <label class="form-label" for="field_isarrived">Isarrived</label>
           <input type="checkbox" class="form-check" name="isarrived" id="field_isarrived" data-cy="isarrived" formControlName="isarrived" />
-        </div> -->
+        </div>
 
-        <!-- <div class="mb-3">
+        <div class="mb-3">
           <label class="form-label" for="field_iscancel">Iscancel</label>
           <input type="checkbox" class="form-check" name="iscancel" id="field_iscancel" data-cy="iscancel" formControlName="iscancel" />
-        </div> -->
+        </div>
 
-        <!-- <div class="mb-3">
+        <div class="mb-3">
           <label class="form-label" for="field_isnoanswer">Isnoanswer</label>
           <input
             type="checkbox"
@@ -265,9 +418,9 @@
             data-cy="isnoanswer"
             formControlName="isnoanswer"
           />
-        </div> -->
+        </div>
 
-        <!-- <div class="mb-3">
+        <div class="mb-3">
           <label class="form-label" for="field_missedappointmentcall">Missedappointmentcall</label>
           <input
             type="text"
@@ -277,9 +430,9 @@
             data-cy="missedappointmentcall"
             formControlName="missedappointmentcall"
           />
-        </div> -->
+        </div>
 
-        <!-- <div class="mb-3">
+        <div class="mb-3">
           <label class="form-label" for="field_customermobileid">Customermobileid</label>
           <input
             type="number"
@@ -289,9 +442,9 @@
             data-cy="customermobileid"
             formControlName="customermobileid"
           />
-        </div> -->
+        </div>
 
-        <!-- <div class="mb-3">
+        <div class="mb-3">
           <label class="form-label" for="field_customermobilevehicleid">Customermobilevehicleid</label>
           <input
             type="number"
@@ -301,14 +454,14 @@
             data-cy="customermobilevehicleid"
             formControlName="customermobilevehicleid"
           />
-        </div> -->
+        </div>
 
-        <!-- <div class="mb-3">
+        <div class="mb-3">
           <label class="form-label" for="field_vehicleid">Vehicleid</label>
           <input type="number" class="form-control" name="vehicleid" id="field_vehicleid" data-cy="vehicleid" formControlName="vehicleid" />
-        </div> -->
+        </div>
 
-        <!-- <div class="mb-3">
+        <div class="mb-3">
           <label class="form-label" for="field_ismobileappointment">Ismobileappointment</label>
           <input
             type="checkbox"
@@ -318,9 +471,9 @@
             data-cy="ismobileappointment"
             formControlName="ismobileappointment"
           />
-        </div> -->
+        </div>
 
-        <!-- <div class="mb-3">
+        <div class="mb-3">
           <label class="form-label" for="field_advancepayment">Advancepayment</label>
           <input
             type="number"
@@ -330,12 +483,12 @@
             data-cy="advancepayment"
             formControlName="advancepayment"
           />
-        </div> -->
+        </div>
 
-        <!-- <div class="mb-3">
+        <div class="mb-3">
           <label class="form-label" for="field_jobid">Jobid</label>
           <input type="number" class="form-control" name="jobid" id="field_jobid" data-cy="jobid" formControlName="jobid" />
-        </div> -->
+        </div>
       </div>
 
       <div>
