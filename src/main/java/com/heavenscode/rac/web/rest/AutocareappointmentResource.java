@@ -2,6 +2,9 @@ package com.heavenscode.rac.web.rest;
 
 import com.heavenscode.rac.domain.Autocareappointment;
 import com.heavenscode.rac.repository.AutocareappointmentRepository;
+import com.heavenscode.rac.service.AutocareappointmentQueryService;
+import com.heavenscode.rac.service.AutocareappointmentService;
+import com.heavenscode.rac.service.criteria.AutocareappointmentCriteria;
 import com.heavenscode.rac.web.rest.errors.BadRequestAlertException;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -15,7 +18,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import tech.jhipster.web.util.HeaderUtil;
@@ -27,20 +29,29 @@ import tech.jhipster.web.util.ResponseUtil;
  */
 @RestController
 @RequestMapping("/api/autocareappointments")
-@Transactional
 public class AutocareappointmentResource {
 
-    private final Logger log = LoggerFactory.getLogger(AutocareappointmentResource.class);
+    private static final Logger LOG = LoggerFactory.getLogger(AutocareappointmentResource.class);
 
     private static final String ENTITY_NAME = "autocareappointment";
 
     @Value("${jhipster.clientApp.name}")
     private String applicationName;
 
+    private final AutocareappointmentService autocareappointmentService;
+
     private final AutocareappointmentRepository autocareappointmentRepository;
 
-    public AutocareappointmentResource(AutocareappointmentRepository autocareappointmentRepository) {
+    private final AutocareappointmentQueryService autocareappointmentQueryService;
+
+    public AutocareappointmentResource(
+        AutocareappointmentService autocareappointmentService,
+        AutocareappointmentRepository autocareappointmentRepository,
+        AutocareappointmentQueryService autocareappointmentQueryService
+    ) {
+        this.autocareappointmentService = autocareappointmentService;
         this.autocareappointmentRepository = autocareappointmentRepository;
+        this.autocareappointmentQueryService = autocareappointmentQueryService;
     }
 
     /**
@@ -53,11 +64,11 @@ public class AutocareappointmentResource {
     @PostMapping("")
     public ResponseEntity<Autocareappointment> createAutocareappointment(@RequestBody Autocareappointment autocareappointment)
         throws URISyntaxException {
-        log.debug("REST request to save Autocareappointment : {}", autocareappointment);
+        LOG.debug("REST request to save Autocareappointment : {}", autocareappointment);
         if (autocareappointment.getId() != null) {
             throw new BadRequestAlertException("A new autocareappointment cannot already have an ID", ENTITY_NAME, "idexists");
         }
-        autocareappointment = autocareappointmentRepository.save(autocareappointment);
+        autocareappointment = autocareappointmentService.save(autocareappointment);
         return ResponseEntity.created(new URI("/api/autocareappointments/" + autocareappointment.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(applicationName, false, ENTITY_NAME, autocareappointment.getId().toString()))
             .body(autocareappointment);
@@ -78,7 +89,7 @@ public class AutocareappointmentResource {
         @PathVariable(value = "id", required = false) final Long id,
         @RequestBody Autocareappointment autocareappointment
     ) throws URISyntaxException {
-        log.debug("REST request to update Autocareappointment : {}, {}", id, autocareappointment);
+        LOG.debug("REST request to update Autocareappointment : {}, {}", id, autocareappointment);
         if (autocareappointment.getId() == null) {
             throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
         }
@@ -90,7 +101,7 @@ public class AutocareappointmentResource {
             throw new BadRequestAlertException("Entity not found", ENTITY_NAME, "idnotfound");
         }
 
-        autocareappointment = autocareappointmentRepository.save(autocareappointment);
+        autocareappointment = autocareappointmentService.update(autocareappointment);
         return ResponseEntity.ok()
             .headers(HeaderUtil.createEntityUpdateAlert(applicationName, false, ENTITY_NAME, autocareappointment.getId().toString()))
             .body(autocareappointment);
@@ -112,7 +123,7 @@ public class AutocareappointmentResource {
         @PathVariable(value = "id", required = false) final Long id,
         @RequestBody Autocareappointment autocareappointment
     ) throws URISyntaxException {
-        log.debug("REST request to partial update Autocareappointment partially : {}, {}", id, autocareappointment);
+        LOG.debug("REST request to partial update Autocareappointment partially : {}, {}", id, autocareappointment);
         if (autocareappointment.getId() == null) {
             throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
         }
@@ -124,91 +135,7 @@ public class AutocareappointmentResource {
             throw new BadRequestAlertException("Entity not found", ENTITY_NAME, "idnotfound");
         }
 
-        Optional<Autocareappointment> result = autocareappointmentRepository
-            .findById(autocareappointment.getId())
-            .map(existingAutocareappointment -> {
-                if (autocareappointment.getAppointmenttype() != null) {
-                    existingAutocareappointment.setAppointmenttype(autocareappointment.getAppointmenttype());
-                }
-                if (autocareappointment.getAppointmentdate() != null) {
-                    existingAutocareappointment.setAppointmentdate(autocareappointment.getAppointmentdate());
-                }
-                if (autocareappointment.getAddeddate() != null) {
-                    existingAutocareappointment.setAddeddate(autocareappointment.getAddeddate());
-                }
-                if (autocareappointment.getConformdate() != null) {
-                    existingAutocareappointment.setConformdate(autocareappointment.getConformdate());
-                }
-                if (autocareappointment.getAppointmentnumber() != null) {
-                    existingAutocareappointment.setAppointmentnumber(autocareappointment.getAppointmentnumber());
-                }
-                if (autocareappointment.getVehiclenumber() != null) {
-                    existingAutocareappointment.setVehiclenumber(autocareappointment.getVehiclenumber());
-                }
-                if (autocareappointment.getAppointmenttime() != null) {
-                    existingAutocareappointment.setAppointmenttime(autocareappointment.getAppointmenttime());
-                }
-                if (autocareappointment.getIsconformed() != null) {
-                    existingAutocareappointment.setIsconformed(autocareappointment.getIsconformed());
-                }
-                if (autocareappointment.getConformedby() != null) {
-                    existingAutocareappointment.setConformedby(autocareappointment.getConformedby());
-                }
-                if (autocareappointment.getLmd() != null) {
-                    existingAutocareappointment.setLmd(autocareappointment.getLmd());
-                }
-                if (autocareappointment.getLmu() != null) {
-                    existingAutocareappointment.setLmu(autocareappointment.getLmu());
-                }
-                if (autocareappointment.getCustomerid() != null) {
-                    existingAutocareappointment.setCustomerid(autocareappointment.getCustomerid());
-                }
-                if (autocareappointment.getContactnumber() != null) {
-                    existingAutocareappointment.setContactnumber(autocareappointment.getContactnumber());
-                }
-                if (autocareappointment.getCustomername() != null) {
-                    existingAutocareappointment.setCustomername(autocareappointment.getCustomername());
-                }
-                if (autocareappointment.getIssued() != null) {
-                    existingAutocareappointment.setIssued(autocareappointment.getIssued());
-                }
-                if (autocareappointment.getHoistid() != null) {
-                    existingAutocareappointment.setHoistid(autocareappointment.getHoistid());
-                }
-                if (autocareappointment.getIsarrived() != null) {
-                    existingAutocareappointment.setIsarrived(autocareappointment.getIsarrived());
-                }
-                if (autocareappointment.getIscancel() != null) {
-                    existingAutocareappointment.setIscancel(autocareappointment.getIscancel());
-                }
-                if (autocareappointment.getIsnoanswer() != null) {
-                    existingAutocareappointment.setIsnoanswer(autocareappointment.getIsnoanswer());
-                }
-                if (autocareappointment.getMissedappointmentcall() != null) {
-                    existingAutocareappointment.setMissedappointmentcall(autocareappointment.getMissedappointmentcall());
-                }
-                if (autocareappointment.getCustomermobileid() != null) {
-                    existingAutocareappointment.setCustomermobileid(autocareappointment.getCustomermobileid());
-                }
-                if (autocareappointment.getCustomermobilevehicleid() != null) {
-                    existingAutocareappointment.setCustomermobilevehicleid(autocareappointment.getCustomermobilevehicleid());
-                }
-                if (autocareappointment.getVehicleid() != null) {
-                    existingAutocareappointment.setVehicleid(autocareappointment.getVehicleid());
-                }
-                if (autocareappointment.getIsmobileappointment() != null) {
-                    existingAutocareappointment.setIsmobileappointment(autocareappointment.getIsmobileappointment());
-                }
-                if (autocareappointment.getAdvancepayment() != null) {
-                    existingAutocareappointment.setAdvancepayment(autocareappointment.getAdvancepayment());
-                }
-                if (autocareappointment.getJobid() != null) {
-                    existingAutocareappointment.setJobid(autocareappointment.getJobid());
-                }
-
-                return existingAutocareappointment;
-            })
-            .map(autocareappointmentRepository::save);
+        Optional<Autocareappointment> result = autocareappointmentService.partialUpdate(autocareappointment);
 
         return ResponseUtil.wrapOrNotFound(
             result,
@@ -220,16 +147,31 @@ public class AutocareappointmentResource {
      * {@code GET  /autocareappointments} : get all the autocareappointments.
      *
      * @param pageable the pagination information.
+     * @param criteria the criteria which the requested entities should match.
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of autocareappointments in body.
      */
     @GetMapping("")
     public ResponseEntity<List<Autocareappointment>> getAllAutocareappointments(
+        AutocareappointmentCriteria criteria,
         @org.springdoc.core.annotations.ParameterObject Pageable pageable
     ) {
-        log.debug("REST request to get a page of Autocareappointments");
-        Page<Autocareappointment> page = autocareappointmentRepository.findAll(pageable);
+        LOG.debug("REST request to get Autocareappointments by criteria: {}", criteria);
+
+        Page<Autocareappointment> page = autocareappointmentQueryService.findByCriteria(criteria, pageable);
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
         return ResponseEntity.ok().headers(headers).body(page.getContent());
+    }
+
+    /**
+     * {@code GET  /autocareappointments/count} : count all the autocareappointments.
+     *
+     * @param criteria the criteria which the requested entities should match.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the count in body.
+     */
+    @GetMapping("/count")
+    public ResponseEntity<Long> countAutocareappointments(AutocareappointmentCriteria criteria) {
+        LOG.debug("REST request to count Autocareappointments by criteria: {}", criteria);
+        return ResponseEntity.ok().body(autocareappointmentQueryService.countByCriteria(criteria));
     }
 
     /**
@@ -240,8 +182,8 @@ public class AutocareappointmentResource {
      */
     @GetMapping("/{id}")
     public ResponseEntity<Autocareappointment> getAutocareappointment(@PathVariable("id") Long id) {
-        log.debug("REST request to get Autocareappointment : {}", id);
-        Optional<Autocareappointment> autocareappointment = autocareappointmentRepository.findById(id);
+        LOG.debug("REST request to get Autocareappointment : {}", id);
+        Optional<Autocareappointment> autocareappointment = autocareappointmentService.findOne(id);
         return ResponseUtil.wrapOrNotFound(autocareappointment);
     }
 
@@ -253,8 +195,8 @@ public class AutocareappointmentResource {
      */
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteAutocareappointment(@PathVariable("id") Long id) {
-        log.debug("REST request to delete Autocareappointment : {}", id);
-        autocareappointmentRepository.deleteById(id);
+        LOG.debug("REST request to delete Autocareappointment : {}", id);
+        autocareappointmentService.delete(id);
         return ResponseEntity.noContent()
             .headers(HeaderUtil.createEntityDeletionAlert(applicationName, false, ENTITY_NAME, id.toString()))
             .build();

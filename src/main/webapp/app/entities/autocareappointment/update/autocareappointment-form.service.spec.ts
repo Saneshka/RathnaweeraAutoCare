@@ -1,6 +1,6 @@
 import { TestBed } from '@angular/core/testing';
 
-import { sampleWithRequiredData, sampleWithNewData } from '../autocareappointment.test-samples';
+import { sampleWithNewData, sampleWithRequiredData } from '../autocareappointment.test-samples';
 
 import { AutocareappointmentFormService } from './autocareappointment-form.service';
 

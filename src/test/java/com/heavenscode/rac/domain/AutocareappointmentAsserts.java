@@ -66,19 +66,18 @@ public class AutocareappointmentAsserts {
             .satisfies(e -> assertThat(e.getIsarrived()).as("check isarrived").isEqualTo(actual.getIsarrived()))
             .satisfies(e -> assertThat(e.getIscancel()).as("check iscancel").isEqualTo(actual.getIscancel()))
             .satisfies(e -> assertThat(e.getIsnoanswer()).as("check isnoanswer").isEqualTo(actual.getIsnoanswer()))
-            .satisfies(
-                e -> assertThat(e.getMissedappointmentcall()).as("check missedappointmentcall").isEqualTo(actual.getMissedappointmentcall())
+            .satisfies(e ->
+                assertThat(e.getMissedappointmentcall()).as("check missedappointmentcall").isEqualTo(actual.getMissedappointmentcall())
             )
             .satisfies(e -> assertThat(e.getCustomermobileid()).as("check customermobileid").isEqualTo(actual.getCustomermobileid()))
-            .satisfies(
-                e ->
-                    assertThat(e.getCustomermobilevehicleid())
-                        .as("check customermobilevehicleid")
-                        .isEqualTo(actual.getCustomermobilevehicleid())
+            .satisfies(e ->
+                assertThat(e.getCustomermobilevehicleid())
+                    .as("check customermobilevehicleid")
+                    .isEqualTo(actual.getCustomermobilevehicleid())
             )
             .satisfies(e -> assertThat(e.getVehicleid()).as("check vehicleid").isEqualTo(actual.getVehicleid()))
-            .satisfies(
-                e -> assertThat(e.getIsmobileappointment()).as("check ismobileappointment").isEqualTo(actual.getIsmobileappointment())
+            .satisfies(e ->
+                assertThat(e.getIsmobileappointment()).as("check ismobileappointment").isEqualTo(actual.getIsmobileappointment())
             )
             .satisfies(e -> assertThat(e.getAdvancepayment()).as("check advancepayment").isEqualTo(actual.getAdvancepayment()))
             .satisfies(e -> assertThat(e.getJobid()).as("check jobid").isEqualTo(actual.getJobid()));
@@ -90,5 +89,7 @@ public class AutocareappointmentAsserts {
      * @param expected the expected entity
      * @param actual the actual entity
      */
-    public static void assertAutocareappointmentUpdatableRelationshipsEquals(Autocareappointment expected, Autocareappointment actual) {}
+    public static void assertAutocareappointmentUpdatableRelationshipsEquals(Autocareappointment expected, Autocareappointment actual) {
+        // empty method
+    }
 }

@@ -109,8 +109,10 @@
       "fieldType": "Integer"
     }
   ],
+  "jpaMetamodelFiltering": true,
   "name": "Autocareappointment",
   "pagination": "pagination",
   "relationships": [],
-  "searchEngine": "no"
+  "searchEngine": "no",
+  "service": "serviceClass"
 }

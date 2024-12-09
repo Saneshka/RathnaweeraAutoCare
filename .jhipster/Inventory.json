@@ -158,8 +158,7 @@
     },
     {
       "fieldName": "barcodeimage",
-      "fieldType": "byte[]",
-      "fieldTypeBlobContent": "image"
+      "fieldType": "ImageBlob"
     },
     {
       "fieldName": "commissionempid",

@@ -2,23 +2,20 @@ import { Routes } from '@angular/router';
 
 import { UserRouteAccessService } from 'app/core/auth/user-route-access.service';
 import { ASC } from 'app/config/navigation.constants';
-import { AutocareappointmentComponent } from './list/autocareappointment.component';
-import { AutocareappointmentDetailComponent } from './detail/autocareappointment-detail.component';
-import { AutocareappointmentUpdateComponent } from './update/autocareappointment-update.component';
 import AutocareappointmentResolve from './route/autocareappointment-routing-resolve.service';
 
 const autocareappointmentRoute: Routes = [
   {
     path: '',
-    component: AutocareappointmentComponent,
+    loadComponent: () => import('./list/autocareappointment.component').then(m => m.AutocareappointmentComponent),
     data: {
-      defaultSort: 'id,' + ASC,
+      defaultSort: `id,${ASC}`,
     },
     canActivate: [UserRouteAccessService],
   },
   {
     path: ':id/view',
-    component: AutocareappointmentDetailComponent,
+    loadComponent: () => import('./detail/autocareappointment-detail.component').then(m => m.AutocareappointmentDetailComponent),
     resolve: {
       autocareappointment: AutocareappointmentResolve,
     },
@@ -26,7 +23,7 @@ const autocareappointmentRoute: Routes = [
   },
   {
     path: 'new',
-    component: AutocareappointmentUpdateComponent,
+    loadComponent: () => import('./update/autocareappointment-update.component').then(m => m.AutocareappointmentUpdateComponent),
     resolve: {
       autocareappointment: AutocareappointmentResolve,
     },
@@ -34,7 +31,7 @@ const autocareappointmentRoute: Routes = [
   },
   {
     path: ':id/edit',
-    component: AutocareappointmentUpdateComponent,
+    loadComponent: () => import('./update/autocareappointment-update.component').then(m => m.AutocareappointmentUpdateComponent),
     resolve: {
       autocareappointment: AutocareappointmentResolve,
     },

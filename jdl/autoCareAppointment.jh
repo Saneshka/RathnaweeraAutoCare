@@ -1,3 +1,5 @@
+filter * 
+
 entity Autocareappointment {
     appointmenttype Integer // AppointmentType
     appointmentdate Instant // AppointmentDate
