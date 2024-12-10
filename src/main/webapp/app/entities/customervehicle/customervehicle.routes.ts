@@ -2,23 +2,20 @@ import { Routes } from '@angular/router';
 
 import { UserRouteAccessService } from 'app/core/auth/user-route-access.service';
 import { ASC } from 'app/config/navigation.constants';
-import { CustomervehicleComponent } from './list/customervehicle.component';
-import { CustomervehicleDetailComponent } from './detail/customervehicle-detail.component';
-import { CustomervehicleUpdateComponent } from './update/customervehicle-update.component';
 import CustomervehicleResolve from './route/customervehicle-routing-resolve.service';
 
 const customervehicleRoute: Routes = [
   {
     path: '',
-    component: CustomervehicleComponent,
+    loadComponent: () => import('./list/customervehicle.component').then(m => m.CustomervehicleComponent),
     data: {
-      defaultSort: 'id,' + ASC,
+      defaultSort: `id,${ASC}`,
     },
     canActivate: [UserRouteAccessService],
   },
   {
     path: ':id/view',
-    component: CustomervehicleDetailComponent,
+    loadComponent: () => import('./detail/customervehicle-detail.component').then(m => m.CustomervehicleDetailComponent),
     resolve: {
       customervehicle: CustomervehicleResolve,
     },
@@ -26,7 +23,7 @@ const customervehicleRoute: Routes = [
   },
   {
     path: 'new',
-    component: CustomervehicleUpdateComponent,
+    loadComponent: () => import('./update/customervehicle-update.component').then(m => m.CustomervehicleUpdateComponent),
     resolve: {
       customervehicle: CustomervehicleResolve,
     },
@@ -34,7 +31,7 @@ const customervehicleRoute: Routes = [
   },
   {
     path: ':id/edit',
-    component: CustomervehicleUpdateComponent,
+    loadComponent: () => import('./update/customervehicle-update.component').then(m => m.CustomervehicleUpdateComponent),
     resolve: {
       customervehicle: CustomervehicleResolve,
     },

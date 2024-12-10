@@ -78,5 +78,7 @@ public class CustomervehicleAsserts {
      * @param expected the expected entity
      * @param actual the actual entity
      */
-    public static void assertCustomervehicleUpdatableRelationshipsEquals(Customervehicle expected, Customervehicle actual) {}
+    public static void assertCustomervehicleUpdatableRelationshipsEquals(Customervehicle expected, Customervehicle actual) {
+        // empty method
+    }
 }

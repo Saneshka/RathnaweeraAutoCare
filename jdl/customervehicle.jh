@@ -1,3 +1,5 @@
+ filter * 
+
 entity Customervehicle {
     customerid Integer // CustomerId
     vehiclenumber String // VehicleNumber

@@ -2,6 +2,9 @@ package com.heavenscode.rac.web.rest;
 
 import com.heavenscode.rac.domain.Customervehicle;
 import com.heavenscode.rac.repository.CustomervehicleRepository;
+import com.heavenscode.rac.service.CustomervehicleQueryService;
+import com.heavenscode.rac.service.CustomervehicleService;
+import com.heavenscode.rac.service.criteria.CustomervehicleCriteria;
 import com.heavenscode.rac.web.rest.errors.BadRequestAlertException;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -15,7 +18,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import tech.jhipster.web.util.HeaderUtil;
@@ -27,20 +29,29 @@ import tech.jhipster.web.util.ResponseUtil;
  */
 @RestController
 @RequestMapping("/api/customervehicles")
-@Transactional
 public class CustomervehicleResource {
 
-    private final Logger log = LoggerFactory.getLogger(CustomervehicleResource.class);
+    private static final Logger LOG = LoggerFactory.getLogger(CustomervehicleResource.class);
 
     private static final String ENTITY_NAME = "customervehicle";
 
     @Value("${jhipster.clientApp.name}")
     private String applicationName;
 
+    private final CustomervehicleService customervehicleService;
+
     private final CustomervehicleRepository customervehicleRepository;
 
-    public CustomervehicleResource(CustomervehicleRepository customervehicleRepository) {
+    private final CustomervehicleQueryService customervehicleQueryService;
+
+    public CustomervehicleResource(
+        CustomervehicleService customervehicleService,
+        CustomervehicleRepository customervehicleRepository,
+        CustomervehicleQueryService customervehicleQueryService
+    ) {
+        this.customervehicleService = customervehicleService;
         this.customervehicleRepository = customervehicleRepository;
+        this.customervehicleQueryService = customervehicleQueryService;
     }
 
     /**
@@ -52,11 +63,11 @@ public class CustomervehicleResource {
      */
     @PostMapping("")
     public ResponseEntity<Customervehicle> createCustomervehicle(@RequestBody Customervehicle customervehicle) throws URISyntaxException {
-        log.debug("REST request to save Customervehicle : {}", customervehicle);
+        LOG.debug("REST request to save Customervehicle : {}", customervehicle);
         if (customervehicle.getId() != null) {
             throw new BadRequestAlertException("A new customervehicle cannot already have an ID", ENTITY_NAME, "idexists");
         }
-        customervehicle = customervehicleRepository.save(customervehicle);
+        customervehicle = customervehicleService.save(customervehicle);
         return ResponseEntity.created(new URI("/api/customervehicles/" + customervehicle.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(applicationName, false, ENTITY_NAME, customervehicle.getId().toString()))
             .body(customervehicle);
@@ -77,7 +88,7 @@ public class CustomervehicleResource {
         @PathVariable(value = "id", required = false) final Long id,
         @RequestBody Customervehicle customervehicle
     ) throws URISyntaxException {
-        log.debug("REST request to update Customervehicle : {}, {}", id, customervehicle);
+        LOG.debug("REST request to update Customervehicle : {}, {}", id, customervehicle);
         if (customervehicle.getId() == null) {
             throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
         }
@@ -89,7 +100,7 @@ public class CustomervehicleResource {
             throw new BadRequestAlertException("Entity not found", ENTITY_NAME, "idnotfound");
         }
 
-        customervehicle = customervehicleRepository.save(customervehicle);
+        customervehicle = customervehicleService.update(customervehicle);
         return ResponseEntity.ok()
             .headers(HeaderUtil.createEntityUpdateAlert(applicationName, false, ENTITY_NAME, customervehicle.getId().toString()))
             .body(customervehicle);
@@ -111,7 +122,7 @@ public class CustomervehicleResource {
         @PathVariable(value = "id", required = false) final Long id,
         @RequestBody Customervehicle customervehicle
     ) throws URISyntaxException {
-        log.debug("REST request to partial update Customervehicle partially : {}, {}", id, customervehicle);
+        LOG.debug("REST request to partial update Customervehicle partially : {}, {}", id, customervehicle);
         if (customervehicle.getId() == null) {
             throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
         }
@@ -123,82 +134,7 @@ public class CustomervehicleResource {
             throw new BadRequestAlertException("Entity not found", ENTITY_NAME, "idnotfound");
         }
 
-        Optional<Customervehicle> result = customervehicleRepository
-            .findById(customervehicle.getId())
-            .map(existingCustomervehicle -> {
-                if (customervehicle.getCustomerid() != null) {
-                    existingCustomervehicle.setCustomerid(customervehicle.getCustomerid());
-                }
-                if (customervehicle.getVehiclenumber() != null) {
-                    existingCustomervehicle.setVehiclenumber(customervehicle.getVehiclenumber());
-                }
-                if (customervehicle.getCategoryid() != null) {
-                    existingCustomervehicle.setCategoryid(customervehicle.getCategoryid());
-                }
-                if (customervehicle.getCategoryname() != null) {
-                    existingCustomervehicle.setCategoryname(customervehicle.getCategoryname());
-                }
-                if (customervehicle.getTypeid() != null) {
-                    existingCustomervehicle.setTypeid(customervehicle.getTypeid());
-                }
-                if (customervehicle.getTypename() != null) {
-                    existingCustomervehicle.setTypename(customervehicle.getTypename());
-                }
-                if (customervehicle.getMakeid() != null) {
-                    existingCustomervehicle.setMakeid(customervehicle.getMakeid());
-                }
-                if (customervehicle.getMakename() != null) {
-                    existingCustomervehicle.setMakename(customervehicle.getMakename());
-                }
-                if (customervehicle.getModel() != null) {
-                    existingCustomervehicle.setModel(customervehicle.getModel());
-                }
-                if (customervehicle.getYom() != null) {
-                    existingCustomervehicle.setYom(customervehicle.getYom());
-                }
-                if (customervehicle.getCustomercode() != null) {
-                    existingCustomervehicle.setCustomercode(customervehicle.getCustomercode());
-                }
-                if (customervehicle.getRemarks() != null) {
-                    existingCustomervehicle.setRemarks(customervehicle.getRemarks());
-                }
-                if (customervehicle.getServicecount() != null) {
-                    existingCustomervehicle.setServicecount(customervehicle.getServicecount());
-                }
-                if (customervehicle.getEngNo() != null) {
-                    existingCustomervehicle.setEngNo(customervehicle.getEngNo());
-                }
-                if (customervehicle.getChaNo() != null) {
-                    existingCustomervehicle.setChaNo(customervehicle.getChaNo());
-                }
-                if (customervehicle.getMilage() != null) {
-                    existingCustomervehicle.setMilage(customervehicle.getMilage());
-                }
-                if (customervehicle.getLastservicedate() != null) {
-                    existingCustomervehicle.setLastservicedate(customervehicle.getLastservicedate());
-                }
-                if (customervehicle.getNextservicedate() != null) {
-                    existingCustomervehicle.setNextservicedate(customervehicle.getNextservicedate());
-                }
-                if (customervehicle.getLmu() != null) {
-                    existingCustomervehicle.setLmu(customervehicle.getLmu());
-                }
-                if (customervehicle.getLmd() != null) {
-                    existingCustomervehicle.setLmd(customervehicle.getLmd());
-                }
-                if (customervehicle.getNextgearoilmilage() != null) {
-                    existingCustomervehicle.setNextgearoilmilage(customervehicle.getNextgearoilmilage());
-                }
-                if (customervehicle.getNextmilage() != null) {
-                    existingCustomervehicle.setNextmilage(customervehicle.getNextmilage());
-                }
-                if (customervehicle.getServiceperiod() != null) {
-                    existingCustomervehicle.setServiceperiod(customervehicle.getServiceperiod());
-                }
-
-                return existingCustomervehicle;
-            })
-            .map(customervehicleRepository::save);
+        Optional<Customervehicle> result = customervehicleService.partialUpdate(customervehicle);
 
         return ResponseUtil.wrapOrNotFound(
             result,
@@ -210,14 +146,31 @@ public class CustomervehicleResource {
      * {@code GET  /customervehicles} : get all the customervehicles.
      *
      * @param pageable the pagination information.
+     * @param criteria the criteria which the requested entities should match.
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of customervehicles in body.
      */
     @GetMapping("")
-    public ResponseEntity<List<Customervehicle>> getAllCustomervehicles(@org.springdoc.core.annotations.ParameterObject Pageable pageable) {
-        log.debug("REST request to get a page of Customervehicles");
-        Page<Customervehicle> page = customervehicleRepository.findAll(pageable);
+    public ResponseEntity<List<Customervehicle>> getAllCustomervehicles(
+        CustomervehicleCriteria criteria,
+        @org.springdoc.core.annotations.ParameterObject Pageable pageable
+    ) {
+        LOG.debug("REST request to get Customervehicles by criteria: {}", criteria);
+
+        Page<Customervehicle> page = customervehicleQueryService.findByCriteria(criteria, pageable);
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
         return ResponseEntity.ok().headers(headers).body(page.getContent());
+    }
+
+    /**
+     * {@code GET  /customervehicles/count} : count all the customervehicles.
+     *
+     * @param criteria the criteria which the requested entities should match.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the count in body.
+     */
+    @GetMapping("/count")
+    public ResponseEntity<Long> countCustomervehicles(CustomervehicleCriteria criteria) {
+        LOG.debug("REST request to count Customervehicles by criteria: {}", criteria);
+        return ResponseEntity.ok().body(customervehicleQueryService.countByCriteria(criteria));
     }
 
     /**
@@ -228,8 +181,8 @@ public class CustomervehicleResource {
      */
     @GetMapping("/{id}")
     public ResponseEntity<Customervehicle> getCustomervehicle(@PathVariable("id") Long id) {
-        log.debug("REST request to get Customervehicle : {}", id);
-        Optional<Customervehicle> customervehicle = customervehicleRepository.findById(id);
+        LOG.debug("REST request to get Customervehicle : {}", id);
+        Optional<Customervehicle> customervehicle = customervehicleService.findOne(id);
         return ResponseUtil.wrapOrNotFound(customervehicle);
     }
 
@@ -241,8 +194,8 @@ public class CustomervehicleResource {
      */
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteCustomervehicle(@PathVariable("id") Long id) {
-        log.debug("REST request to delete Customervehicle : {}", id);
-        customervehicleRepository.deleteById(id);
+        LOG.debug("REST request to delete Customervehicle : {}", id);
+        customervehicleService.delete(id);
         return ResponseEntity.noContent()
             .headers(HeaderUtil.createEntityDeletionAlert(applicationName, false, ENTITY_NAME, id.toString()))
             .build();
