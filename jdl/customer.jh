@@ -1,3 +1,5 @@
+filter * 
+
 entity Customer{
     customertype Integer // customertype
     code String

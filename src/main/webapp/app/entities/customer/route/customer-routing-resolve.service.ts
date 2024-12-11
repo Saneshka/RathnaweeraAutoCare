@@ -1,14 +1,14 @@
 import { inject } from '@angular/core';
 import { HttpResponse } from '@angular/common/http';
 import { ActivatedRouteSnapshot, Router } from '@angular/router';
-import { of, EMPTY, Observable } from 'rxjs';
+import { EMPTY, Observable, of } from 'rxjs';
 import { mergeMap } from 'rxjs/operators';
 
 import { ICustomer } from '../customer.model';
 import { CustomerService } from '../service/customer.service';
 
 const customerResolve = (route: ActivatedRouteSnapshot): Observable<null | ICustomer> => {
-  const id = route.params['id'];
+  const id = route.params.id;
   if (id) {
     return inject(CustomerService)
       .find(id)
@@ -16,10 +16,9 @@ const customerResolve = (route: ActivatedRouteSnapshot): Observable<null | ICust
         mergeMap((customer: HttpResponse<ICustomer>) => {
           if (customer.body) {
             return of(customer.body);
-          } else {
-            inject(Router).navigate(['404']);
-            return EMPTY;
           }
+          inject(Router).navigate(['404']);
+          return EMPTY;
         }),
       );
   }

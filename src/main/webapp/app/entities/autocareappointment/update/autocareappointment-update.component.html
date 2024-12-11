@@ -70,6 +70,7 @@
               formControlName="vehiclenumber"
               autocomplete="off"
               list="vehiclenumberList"
+              (change)="onVehicleSelect($event)"
               (input)="onVehicleSearch($event)"
             />
             <datalist id="vehiclenumberList">

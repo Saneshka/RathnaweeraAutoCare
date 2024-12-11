@@ -325,8 +325,10 @@
       "fieldType": "Integer"
     }
   ],
+  "jpaMetamodelFiltering": true,
   "name": "Customer",
   "pagination": "pagination",
   "relationships": [],
-  "searchEngine": "no"
+  "searchEngine": "no",
+  "service": "serviceClass"
 }

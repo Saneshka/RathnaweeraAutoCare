@@ -148,46 +148,26 @@ export class AutocareappointmentUpdateComponent implements OnInit {
       this.filteredVehicles = [];
     }
   }
-  // vehicleSelected(event: Event): void {
-  //   const input = event.target as HTMLInputElement;
-  //   const selectedVehicleNumber = input.value;
 
-  //   // Find the selected vehicle from the filtered list
-  //   const selectedVehicle = this.filteredVehicles.find(vehicle => vehicle.vehiclenumber === selectedVehicleNumber);
+  searchedCustomer: ICustomer | null = null;
 
-  //   if (selectedVehicle) {
-  //     // Update the form with the selected vehicle's customer details
-  //     this.editForm.patchValue({
-  //       customername: selectedVehicle.customername,
-  //       contactnumber: selectedVehicle.contactnumber,
-  //     });
-  //   } else {
-  //     // Clear the fields if no match is found
-  //     this.form.patchValue({
-  //       customername: '',
-  //       contactnumber: '',
-  //     });
-  //   }
-  // }
+  onVehicleSelect(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    const selectedVehicleNumber = input.value;
 
-  // loadCustomerDetails() {
-  //   this.editForm.get(['vehiclenumber'])?.valueChanges.subscribe(vehicleNumber => {
-  //     const selectedVehicle = this.customervehicles.find(vehicle => vehicle.vehiclenumber === vehicleNumber);
+    const selectedVehicle = this.filteredVehicles.find(vehicle => vehicle.vehiclenumber === selectedVehicleNumber);
 
-  //     if (selectedVehicle && selectedVehicle.customerid) {
-  //       this.customerService.find(selectedVehicle.customerid).subscribe(customerResponse => {
-  //         const customer = customerResponse.body;
-  //         if (customer) {
-  //           this.editForm.get(['customername'])?.patchValue(customer.fullname);
-  //           this.editForm.get(['contactnumber'])?.patchValue(customer.residencephone);
-  //         }
-  //       });
-  //     } else {
-  //       this.editForm.get(['customername'])?.patchValue(null);
-  //       this.editForm.get(['contactnumber'])?.patchValue(null);
-  //     }
-  //   });
-  // }
+    if (selectedVehicle && selectedVehicle.customerid != null) {
+      this.customerService.find(selectedVehicle.customerid).subscribe(res => {
+        this.searchedCustomer = res.body;
+        console.log(this.searchedCustomer?.fullname);
+        this.editForm.get('customername')?.patchValue(this.searchedCustomer?.fullname);
+        this.editForm.get('contactnumber')?.patchValue(this.searchedCustomer?.residencephone);
+      });
+    } else {
+      console.error('Invalid customer ID:', selectedVehicle);
+    }
+  }
 
   loadHoistAppointmentTime(): void {
     this.autocarehoisttypeService.query().subscribe(response => {
@@ -204,23 +184,6 @@ export class AutocareappointmentUpdateComponent implements OnInit {
       console.log('Time slots : ', this.timetableData);
     });
   }
-
-  // loadHoistAppointmentTime(): void {
-  //   forkJoin({
-  //     hoistTypes: this.autocarehoisttypeService.query(),
-  //     hoists: this.autocarehoistService.query(),
-  //     timetables: this.autocaretimetableService.query({ size: 2000, page: 0 }),
-  //   }).subscribe(({ hoistTypes, hoists, timetables }) => {
-  //     this.hoistTypeData = hoistTypes.body || [];
-  //     this.hoistData = hoists.body || [];
-  //     this.timetableData = (timetables.body || []).map(timetable => {
-  //       if (timetable.hoisttime) {
-  //         return { ...timetable, hoisttime: dayjs(timetable.hoisttime).format('HH:mm') };
-  //       }
-  //       return timetable;
-  //     });
-  //   });
-  // }
 
   previousState(): void {
     window.history.back();

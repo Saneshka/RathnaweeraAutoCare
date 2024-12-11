@@ -84,8 +84,8 @@ public class CustomerAsserts {
             .satisfies(e -> assertThat(e.getBusinessdistrictid()).as("check businessdistrictid").isEqualTo(actual.getBusinessdistrictid()))
             .satisfies(e -> assertThat(e.getContactpersonname()).as("check contactpersonname").isEqualTo(actual.getContactpersonname()))
             .satisfies(e -> assertThat(e.getContactpersonphone()).as("check contactpersonphone").isEqualTo(actual.getContactpersonphone()))
-            .satisfies(
-                e -> assertThat(e.getContactpersonmobile()).as("check contactpersonmobile").isEqualTo(actual.getContactpersonmobile())
+            .satisfies(e ->
+                assertThat(e.getContactpersonmobile()).as("check contactpersonmobile").isEqualTo(actual.getContactpersonmobile())
             )
             .satisfies(e -> assertThat(e.getContactpersonemail()).as("check contactpersonemail").isEqualTo(actual.getContactpersonemail()))
             .satisfies(e -> assertThat(e.getRootmappath()).as("check rootmappath").isEqualTo(actual.getRootmappath()))
@@ -99,60 +99,54 @@ public class CustomerAsserts {
             .satisfies(e -> assertThat(e.getMaximumdiscount()).as("check maximumdiscount").isEqualTo(actual.getMaximumdiscount()))
             .satisfies(e -> assertThat(e.getCreditlimit()).as("check creditlimit").isEqualTo(actual.getCreditlimit()))
             .satisfies(e -> assertThat(e.getHassecuritydeposit()).as("check hassecuritydeposit").isEqualTo(actual.getHassecuritydeposit()))
-            .satisfies(
-                e -> assertThat(e.getSecuritydepositamount()).as("check securitydepositamount").isEqualTo(actual.getSecuritydepositamount())
+            .satisfies(e ->
+                assertThat(e.getSecuritydepositamount()).as("check securitydepositamount").isEqualTo(actual.getSecuritydepositamount())
             )
             .satisfies(e -> assertThat(e.getPaybycash()).as("check paybycash").isEqualTo(actual.getPaybycash()))
-            .satisfies(
-                e -> assertThat(e.getCashpaymentbeforeload()).as("check cashpaymentbeforeload").isEqualTo(actual.getCashpaymentbeforeload())
+            .satisfies(e ->
+                assertThat(e.getCashpaymentbeforeload()).as("check cashpaymentbeforeload").isEqualTo(actual.getCashpaymentbeforeload())
             )
-            .satisfies(
-                e ->
-                    assertThat(e.getCashlastinvoicebeforeload())
-                        .as("check cashlastinvoicebeforeload")
-                        .isEqualTo(actual.getCashlastinvoicebeforeload())
+            .satisfies(e ->
+                assertThat(e.getCashlastinvoicebeforeload())
+                    .as("check cashlastinvoicebeforeload")
+                    .isEqualTo(actual.getCashlastinvoicebeforeload())
             )
             .satisfies(e -> assertThat(e.getPaybycredit()).as("check paybycredit").isEqualTo(actual.getPaybycredit()))
             .satisfies(e -> assertThat(e.getCreditoneweekcheck()).as("check creditoneweekcheck").isEqualTo(actual.getCreditoneweekcheck()))
-            .satisfies(
-                e -> assertThat(e.getCreditpaymentbydays()).as("check creditpaymentbydays").isEqualTo(actual.getCreditpaymentbydays())
+            .satisfies(e ->
+                assertThat(e.getCreditpaymentbydays()).as("check creditpaymentbydays").isEqualTo(actual.getCreditpaymentbydays())
             )
-            .satisfies(
-                e -> assertThat(e.getHaspurchasingdeposit()).as("check haspurchasingdeposit").isEqualTo(actual.getHaspurchasingdeposit())
+            .satisfies(e ->
+                assertThat(e.getHaspurchasingdeposit()).as("check haspurchasingdeposit").isEqualTo(actual.getHaspurchasingdeposit())
             )
-            .satisfies(
-                e ->
-                    assertThat(e.getHassecuritydepositbond())
-                        .as("check hassecuritydepositbond")
-                        .isEqualTo(actual.getHassecuritydepositbond())
+            .satisfies(e ->
+                assertThat(e.getHassecuritydepositbond()).as("check hassecuritydepositbond").isEqualTo(actual.getHassecuritydepositbond())
             )
             .satisfies(e -> assertThat(e.getHasassestsdeposit()).as("check hasassestsdeposit").isEqualTo(actual.getHasassestsdeposit()))
-            .satisfies(
-                e -> assertThat(e.getCustomerrootmappath()).as("check customerrootmappath").isEqualTo(actual.getCustomerrootmappath())
+            .satisfies(e ->
+                assertThat(e.getCustomerrootmappath()).as("check customerrootmappath").isEqualTo(actual.getCustomerrootmappath())
             )
             .satisfies(e -> assertThat(e.getEmployername()).as("check employername").isEqualTo(actual.getEmployername()))
             .satisfies(e -> assertThat(e.getEmployeraddress()).as("check employeraddress").isEqualTo(actual.getEmployeraddress()))
             .satisfies(e -> assertThat(e.getEmployerphone()).as("check employerphone").isEqualTo(actual.getEmployerphone()))
-            .satisfies(
-                e -> assertThat(e.getEmployerdesignation()).as("check employerdesignation").isEqualTo(actual.getEmployerdesignation())
+            .satisfies(e ->
+                assertThat(e.getEmployerdesignation()).as("check employerdesignation").isEqualTo(actual.getEmployerdesignation())
             )
-            .satisfies(
-                e -> assertThat(e.getPreviousemployername()).as("check previousemployername").isEqualTo(actual.getPreviousemployername())
+            .satisfies(e ->
+                assertThat(e.getPreviousemployername()).as("check previousemployername").isEqualTo(actual.getPreviousemployername())
             )
-            .satisfies(
-                e ->
-                    assertThat(e.getPreviousemployeraddress())
-                        .as("check previousemployeraddress")
-                        .isEqualTo(actual.getPreviousemployeraddress())
+            .satisfies(e ->
+                assertThat(e.getPreviousemployeraddress())
+                    .as("check previousemployeraddress")
+                    .isEqualTo(actual.getPreviousemployeraddress())
             )
             .satisfies(e -> assertThat(e.getPreviousindustry()).as("check previousindustry").isEqualTo(actual.getPreviousindustry()))
             .satisfies(e -> assertThat(e.getPreviousperiod()).as("check previousperiod").isEqualTo(actual.getPreviousperiod()))
             .satisfies(e -> assertThat(e.getPreviouspositions()).as("check previouspositions").isEqualTo(actual.getPreviouspositions()))
-            .satisfies(
-                e ->
-                    assertThat(e.getPreviousresionforleaving())
-                        .as("check previousresionforleaving")
-                        .isEqualTo(actual.getPreviousresionforleaving())
+            .satisfies(e ->
+                assertThat(e.getPreviousresionforleaving())
+                    .as("check previousresionforleaving")
+                    .isEqualTo(actual.getPreviousresionforleaving())
             )
             .satisfies(e -> assertThat(e.getHascreaditlimit()).as("check hascreaditlimit").isEqualTo(actual.getHascreaditlimit()))
             .satisfies(e -> assertThat(e.getAccountid()).as("check accountid").isEqualTo(actual.getAccountid()))
@@ -171,5 +165,7 @@ public class CustomerAsserts {
      * @param expected the expected entity
      * @param actual the actual entity
      */
-    public static void assertCustomerUpdatableRelationshipsEquals(Customer expected, Customer actual) {}
+    public static void assertCustomerUpdatableRelationshipsEquals(Customer expected, Customer actual) {
+        // empty method
+    }
 }
