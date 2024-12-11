@@ -78,7 +78,7 @@ export class AutocareappointmentUpdateComponent implements OnInit {
         this.updateForm(autocareappointment);
       }
       this.loadDataFromOtherEntities();
-      this.loadCustomerDetails();
+      // this.loadCustomerDetails();
       this.loadHoistAppointmentTime();
     });
   }
@@ -135,12 +135,12 @@ export class AutocareappointmentUpdateComponent implements OnInit {
   filteredVehicles: ICustomervehicle[] = [];
 
   onVehicleSearch(event: Event): void {
-    const input = event.target as HTMLInputElement; // Explicitly cast the event target to HTMLInputElement
+    const input = event.target as HTMLInputElement;
     const searchTerm = input.value;
 
     if (searchTerm.length > 2) {
-      // Fetch matching results based on user input
-      this.customervehicleService.query({ 'vehiclenumber.contains': searchTerm }).subscribe(response => {
+      // Use the new service method to fetch matching results
+      this.customervehicleService.findByVehicleNumber(searchTerm).subscribe(response => {
         this.filteredVehicles = response.body || [];
       });
     } else {
@@ -148,25 +148,46 @@ export class AutocareappointmentUpdateComponent implements OnInit {
       this.filteredVehicles = [];
     }
   }
+  // vehicleSelected(event: Event): void {
+  //   const input = event.target as HTMLInputElement;
+  //   const selectedVehicleNumber = input.value;
 
-  loadCustomerDetails() {
-    this.editForm.get(['vehiclenumber'])?.valueChanges.subscribe(vehicleNumber => {
-      const selectedVehicle = this.customervehicles.find(vehicle => vehicle.vehiclenumber === vehicleNumber);
+  //   // Find the selected vehicle from the filtered list
+  //   const selectedVehicle = this.filteredVehicles.find(vehicle => vehicle.vehiclenumber === selectedVehicleNumber);
 
-      if (selectedVehicle && selectedVehicle.customerid) {
-        this.customerService.find(selectedVehicle.customerid).subscribe(customerResponse => {
-          const customer = customerResponse.body;
-          if (customer) {
-            this.editForm.get(['customername'])?.patchValue(customer.fullname);
-            this.editForm.get(['contactnumber'])?.patchValue(customer.residencephone);
-          }
-        });
-      } else {
-        this.editForm.get(['customername'])?.patchValue(null);
-        this.editForm.get(['contactnumber'])?.patchValue(null);
-      }
-    });
-  }
+  //   if (selectedVehicle) {
+  //     // Update the form with the selected vehicle's customer details
+  //     this.editForm.patchValue({
+  //       customername: selectedVehicle.customername,
+  //       contactnumber: selectedVehicle.contactnumber,
+  //     });
+  //   } else {
+  //     // Clear the fields if no match is found
+  //     this.form.patchValue({
+  //       customername: '',
+  //       contactnumber: '',
+  //     });
+  //   }
+  // }
+
+  // loadCustomerDetails() {
+  //   this.editForm.get(['vehiclenumber'])?.valueChanges.subscribe(vehicleNumber => {
+  //     const selectedVehicle = this.customervehicles.find(vehicle => vehicle.vehiclenumber === vehicleNumber);
+
+  //     if (selectedVehicle && selectedVehicle.customerid) {
+  //       this.customerService.find(selectedVehicle.customerid).subscribe(customerResponse => {
+  //         const customer = customerResponse.body;
+  //         if (customer) {
+  //           this.editForm.get(['customername'])?.patchValue(customer.fullname);
+  //           this.editForm.get(['contactnumber'])?.patchValue(customer.residencephone);
+  //         }
+  //       });
+  //     } else {
+  //       this.editForm.get(['customername'])?.patchValue(null);
+  //       this.editForm.get(['contactnumber'])?.patchValue(null);
+  //     }
+  //   });
+  // }
 
   loadHoistAppointmentTime(): void {
     this.autocarehoisttypeService.query().subscribe(response => {

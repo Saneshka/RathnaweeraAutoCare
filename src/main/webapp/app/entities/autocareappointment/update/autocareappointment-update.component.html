@@ -69,10 +69,10 @@
               data-cy="vehiclenumber"
               formControlName="vehiclenumber"
               autocomplete="off"
+              list="vehiclenumberList"
               (input)="onVehicleSearch($event)"
             />
-
-            <datalist id="vehiclenumber">
+            <datalist id="vehiclenumberList">
               <option *ngFor="let item of filteredVehicles" [value]="item.vehiclenumber">
                 {{ item.milage }}KM - {{ item.nextmilage }}KM
               </option>
