@@ -14,6 +14,20 @@ import SidenavbarComponent from '../sidenavbar/sidenavbar.component';
   templateUrl: './main.component.html',
   providers: [AppPageTitleStrategy],
   imports: [RouterOutlet, FooterComponent, PageRibbonComponent, SidenavbarComponent], // Include SidebarComponent
+
+  styles: [
+    `
+      .sidebar {
+        width: 250px; /* Adjust width as needed */
+        flex-shrink: 0; /* Prevent shrinking */
+      }
+
+      .content-container {
+        flex-grow: 1;
+        // overflow: hidden; /* Prevent unwanted scrolling */
+      }
+    `,
+  ],
 })
 export default class MainComponent implements OnInit {
   private router = inject(Router);

@@ -1,19 +1,11 @@
-<jhi-page-ribbon></jhi-page-ribbon>
+<div class="d-flex vh-100">
+  <jhi-sidebar class="sidebar"></jhi-sidebar>
 
-<div class="d-flex">
-  <jhi-sidebar></jhi-sidebar>
-  <!-- Include the sidebar here -->
-
-  <div class="flex-grow-1">
-    <!-- <div>
-      <router-outlet name="navbar"></router-outlet>
-    </div>  -->
-
-    <div class="container-fluid" style="width: 1260px; margin-right: 0px">
+  <div class="flex-grow-1 content-container">
+    <div class="container-fluid" style="max-width: 1260px; margin-right: 0px">
       <div class="card jh-card">
         <router-outlet></router-outlet>
       </div>
-
       <jhi-footer></jhi-footer>
     </div>
   </div>
