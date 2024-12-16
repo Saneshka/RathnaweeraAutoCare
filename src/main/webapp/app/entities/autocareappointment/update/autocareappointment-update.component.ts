@@ -21,7 +21,10 @@ import { AutocarehoistService } from 'app/entities/autocarehoist/service/autocar
 import { HoisttypeService } from 'app/entities/hoisttype/service/hoisttype.service';
 import { AutocaretimetableService } from 'app/entities/autocaretimetable/service/autocaretimetable.service';
 import { NgbAccordionCollapse, NgbAccordionHeader, NgbAccordionModule } from '@ng-bootstrap/ng-bootstrap';
-import utc from 'dayjs/plugin/utc';
+import utc from 'dayjs/esm/plugin/utc';
+
+dayjs.extend(utc);
+
 @Component({
   standalone: true,
   selector: 'jhi-autocareappointment-update',
@@ -92,22 +95,46 @@ export class AutocareappointmentUpdateComponent implements OnInit {
     return hoistType ? hoistType.hoisttype : undefined;
   }
 
+  // selectTime(timetable: any): void {
+  //   const appointmentDate = this.editForm.get('appointmentdate')?.value;
+  //   console.log('new appointment date : ', appointmentDate);
+  //   const dd = dayjs('1900-01-01 08:00:00', 'YYYY-MM-DD HH:mm:ss');
+  //   console.log('check static value', dd);
+  //   if (appointmentDate && timetable.hoisttime) {
+  //     const appointmentDateTime = dayjs(appointmentDate)
+  //       .hour(dayjs(timetable.hoisttime).hour())
+  //       .minute(dayjs(timetable.hoisttime).minute())
+  //       .second(0)
+  //       .format('YYYY-MM-DDTHH:mm');
+
+  //     // const appointmentDateTime = dayjs(appointmentDate)
+
+  //     console.log('new appointment time : ', appointmentDateTime);
+
+  //     this.editForm.get('appointmenttime')?.patchValue(appointmentDateTime);
+
+  //     this.selectedTime = timetable.hoisttime;
+  //     this.selectedHoist = timetable.hoistid;
+  //   }
+  // }
+
   selectTime(timetable: any): void {
+    console.log('send timetable : ', timetable);
     const appointmentDate = this.editForm.get('appointmentdate')?.value;
     console.log('new appointment date : ', appointmentDate);
-    const dd = dayjs('1900-01-01 08:00:00', 'YYYY-MM-DD HH:mm:ss');
-    console.log('check static value', dd);
+
     if (appointmentDate && timetable.hoisttime) {
-      // Combine the date and time using dayjs
+      // Convert hoisttime to UTC and combine with the appointment date
+      const hoistTimeInUTC = dayjs(timetable.hoisttime, 'HH:mm:ss').utc();
+      console.log('timatable.hoisttime before attachment : ', hoistTimeInUTC);
       const appointmentDateTime = dayjs(appointmentDate)
-        .hour(dayjs(timetable.hoisttime).hour())
-        .minute(dayjs(timetable.hoisttime).minute())
+        .hour(hoistTimeInUTC.hour())
+        .minute(hoistTimeInUTC.minute())
         .second(0)
-        .format('YYYY-MM-DDTHH:mm'); // Use .toISOString() to convert to ISO format
+        .utc() // Ensure the final result is also in UTC
+        .format('YYYY-MM-DDTHH:mm');
 
-      // const appointmentDateTime = dayjs(appointmentDate)
-
-      console.log('new appointment time : ', appointmentDateTime);
+      console.log('new appointment time (UTC) : ', appointmentDateTime);
 
       // Update the appointmenttime in the form
       this.editForm.get('appointmenttime')?.patchValue(appointmentDateTime);
