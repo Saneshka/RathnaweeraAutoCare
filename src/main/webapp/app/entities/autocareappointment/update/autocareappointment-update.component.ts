@@ -118,7 +118,7 @@ export class AutocareappointmentUpdateComponent implements OnInit {
   //   }
   // }
 
-  selectTime(timetable: any): void {
+  selectTime(timetable: any, hoistId: number): void {
     console.log('send timetable : ', timetable);
     const appointmentDate = this.editForm.get('appointmentdate')?.value;
     console.log('new appointment date : ', appointmentDate);
@@ -139,9 +139,14 @@ export class AutocareappointmentUpdateComponent implements OnInit {
       // Update the appointmenttime in the form
       this.editForm.get('appointmenttime')?.patchValue(appointmentDateTime);
 
+      console.log('hoistid :', hoistId);
+      this.editForm.get('hoistid')?.patchValue(hoistId);
+
       // Optionally store the selected time and hoist for reference
       this.selectedTime = timetable.hoisttime;
       this.selectedHoist = timetable.hoistid;
+    } else {
+      alert('Please select an Appointment Date');
     }
   }
 

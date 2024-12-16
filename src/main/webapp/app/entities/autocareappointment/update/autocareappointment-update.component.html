@@ -217,7 +217,12 @@
                               <div style="display: flex; flex-wrap: wrap; gap: 8px">
                                 <ng-container *ngFor="let timetable of timetableData">
                                   <ng-container *ngIf="timetable.hoisttypename === hoistType.hoisttype">
-                                    <button type="button" style="width: 100px" (click)="selectTime(timetable)" class="btn btn-primary">
+                                    <button
+                                      type="button"
+                                      style="width: 100px"
+                                      (click)="selectTime(timetable, hoist.id)"
+                                      class="btn btn-primary"
+                                    >
                                       {{ timetable.hoisttime | date: 'hh:mm' : '+0000' }}
                                       <!-- {{ timetable.hoisttime }} -->
                                     </button>
